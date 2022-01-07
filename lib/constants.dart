@@ -1,0 +1,18 @@
+class AppRoutes {
+  static const rating = '/rating';
+  static const shipmentHistory = '/history';
+  static const signin = '/signin';
+  static const signup = '/signup';
+  static const home = '/';
+  static const welcome = "/welcome";
+  static const intro = "/intro";
+  static const profile = "/profile";
+  static const feedback = "/feedback";
+  static const support = "/support";
+  static const splash = "/splash";
+  static const confirmShipment = "/confirm-shipment";
+  static const packageDetail = "/packageDetails";
+}
+
+String ipAddress = "http://147.182.225.253/";
+int timeout = 100000;
