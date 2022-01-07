@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/user.dart';
 import 'package:courier_services/services/exception.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,19 +14,20 @@ class Auth {
       receiveTimeout: timeout,
     ),
   );
-  static Future<void> loginUser(Map data) async {
+  static Future<Either<User, ErrorMessage>> loginUser(Map data) async {
     try {
       final response = await dio.post(
-        "${ipAddress}api/auth/login/",
-        data: data,
+        "${URL}auth/login/",
+        data: jsonEncode(data),
         options: Options(
           sendTimeout: timeout,
         ),
       );
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       _prefs.setString("authToken", response.data['token']);
+      return Left(User.fromJson(response.data));
     } catch (e) {
-      throw getException(e);
+      return Right(getException(e));
     }
   }
 
@@ -34,84 +36,93 @@ class Auth {
     return _prefs.getString("authToken");
   }
 
-  static Future<void> registerUser(String data) async {
+  static Future<Either<User, ErrorMessage>> registerUser(Map data) async {
     try {
-      await dio.post("${ipAddress}api/auth/customer/register/",
+      final response = await dio.post("${URL}auth/register/",
           data: data, options: Options(sendTimeout: timeout));
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      _prefs.setString("authToken", response.data['token']);
+      return Left(User.fromJson(response.data));
     } catch (e) {
-      throw getException(e);
+      return Right(getException(e));
     }
   }
 
-  static Future<User> updateProfile(String data) async {
+  static Future<Either<User, ErrorMessage>> updateProfile(Map data) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
       String? authToken = _prefs.getString("authToken");
-      var _profile = await dio.put("${ipAddress}api/customer/profile/",
+      var _profile = await dio.put("${URL}api/customer/profile/",
           options: Options(
               headers: {'Authorization': 'Token $authToken'},
               sendTimeout: timeout),
-          data: data);
+          data: jsonEncode(data));
       print(_profile.data);
       _prefs.setString("user", jsonEncode(_profile.data));
-      return User.fromJson(_profile.data as Map<String, dynamic>);
+      return Left(User.fromJson(_profile.data as Map<String, dynamic>));
     } catch (e) {
-      throw getException(e);
+      return Right(getException(e));
     }
   }
 
-  static Future<Map<String, dynamic>> resetPassword(
+  static Future<Either<Map<String, dynamic>, ErrorMessage>> resetPassword(
       {required Map<String, dynamic> data}) async {
     try {
-      final res = await dio.post("${ipAddress}api/auth/reset/", data: data);
-      return res.data as Map<String, dynamic>;
+      final res = await dio.post("${URL}api/auth/reset/", data: jsonEncode(data));
+      return Left(res.data as Map<String, dynamic>);
     } catch (e) {
-      throw getException(e);
+      return Right(
+        getException(e),
+      );
     }
   }
 
-  static Future<Map<String, dynamic>> setNewPassword(
+  static Future<Either<Map<String, dynamic>, ErrorMessage>> setNewPassword(
       {required Map<String, dynamic> data}) async {
     try {
-      final res = await dio.put("${ipAddress}api/auth/reset/",
+      final res = await dio.put("${URL}api/auth/reset/",
           data: data, options: Options(sendTimeout: timeout));
-      return res.data as Map<String, dynamic>;
+      return Left(res.data as Map<String, dynamic>);
     } catch (e) {
-      throw getException(e);
+      return Right(
+        getException(e),
+      );
     }
   }
 
-  static Future<User> refreshUserProfile() async {
+  static Future<Either<User, ErrorMessage>> refreshUserProfile() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
       String? authToken = _prefs.getString("authToken");
-      var profile = await dio.get("${ipAddress}api/customer/profile/",
+      var profile = await dio.get("${URL}profile/",
           options: Options(
               headers: {'Authorization': 'Token $authToken'},
               sendTimeout: timeout));
       _prefs.setString("user", jsonEncode(profile.data));
-      return User.fromJson(profile.data);
+      return Left(User.fromJson(profile.data));
     } catch (e) {
-      throw getException(e);
+      return Right(
+        getException(e),
+      );
     }
   }
 
-  static Future<User> getUserProfile() async {
+  static Future<Either<User, ErrorMessage>> getUserProfile() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? _userData = _prefs.getString("user");
     if (_userData != null) {
-      return User.fromJson(jsonDecode(_userData));
+      return Left(User.fromJson(jsonDecode(_userData)));
     } else {
       try {
         String? authToken = _prefs.getString("authToken");
-        var profile = await dio.get("${ipAddress}api/customer/profile/",
+        var profile = await dio.get("${URL}profile/",
             options: Options(
                 headers: {'Authorization': 'Token $authToken'},
                 sendTimeout: timeout));
         _prefs.setString("user", jsonEncode(profile.data));
-        return User.fromJson(profile.data);
+        return Left(User.fromJson(profile.data));
       } catch (e) {
-        throw getException(e);
+        return Right(getException(e));
       }
     }
   }

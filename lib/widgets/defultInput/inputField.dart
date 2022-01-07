@@ -1,3 +1,4 @@
+import 'package:courier_services/utils/validators.dart';
 import 'package:flutter/material.dart';
 import '../../theme.dart';
 
@@ -42,5 +43,49 @@ class DefaultInput extends StatelessWidget {
         validator: this.validator,
       ),
     );
+  }
+}
+
+//password field
+class PasswordField extends StatefulWidget {
+  final TextEditingController controller;
+
+  const PasswordField(this.controller);
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool hidePassword = true;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 8),
+        child: TextFormField(
+          obscureText: hidePassword,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              borderSide:
+                  const BorderSide(color: ColorTheme.borderColor, width: 0.0),
+            ),
+            prefixIcon: Icon(Icons.lock),
+            hintText: "password",
+            suffix: InkWell(
+                onTap: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+                child: Icon(
+                  hidePassword ? Icons.visibility : Icons.visibility_off,
+                  color: ColorTheme.dark[2],
+                )),
+          ),
+          validator: passwordValidator,
+          controller: widget.controller,
+        ));
   }
 }

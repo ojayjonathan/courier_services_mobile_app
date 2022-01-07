@@ -30,13 +30,6 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87, size: 12.0),
-          textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
         ),
       ),
       initialRoute: AppRoutes.splash,
@@ -59,5 +52,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-// primarySwatch: Color(0x3277D8),
 

@@ -20,16 +20,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final FocusNode myFocusNode = FocusNode();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
 
   @override
   void initState() {
     user = widget.user;
     _emailController.text = user.email;
-    _firstNameController.text = user.firstName;
-    _lastNameController.text = user.lastName;
+    _usernameController.text = user.userName;
     _phoneNumberController.text = user.phoneNumber;
     super.initState();
   }
@@ -46,29 +44,33 @@ class _ProfilePageState extends State<ProfilePage> {
         "Updating please wait...",
         style: TextStyle(color: ColorTheme.successColor),
       )));
-      try {
-        User _updatedUser = await Auth.updateProfile(jsonEncode({
-          "email": _emailController.text,
-          "first_name": _firstNameController.text,
-          "last_name": _lastNameController.text,
-          "phone_number": "+254${(_phoneNumberController.text).substring(1)}",
-        }));
-        setState(() {
-          user = _updatedUser;
-        });
-        //if profile update was successful
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-          "Profile update was sucessfull",
-          style: TextStyle(color: ColorTheme.successColor),
-        )));
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-          " e.response.toString()",
-          style: TextStyle(color: Theme.of(context).errorColor),
-        )));
-      }
+      final _res = await Auth.updateProfile({
+        "email": _emailController.text,
+        "username": _usernameController.text,
+        "phone_number": "+254${(_phoneNumberController.text).substring(1)}",
+      });
+      _res.fold((_updatedUser) {
+        setState(
+          () {
+            user = _updatedUser;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+              "Profile update was sucessfull",
+              style: TextStyle(color: ColorTheme.successColor),
+            )));
+          },
+        );
+      },
+          (r) => {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      r.message,
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                  ),
+                )
+              });
     }
   }
 
@@ -78,8 +80,8 @@ class _ProfilePageState extends State<ProfilePage> {
     myFocusNode.dispose();
     super.dispose();
     _emailController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _usernameController.dispose();
+
     _phoneNumberController.dispose();
   }
 
@@ -114,103 +116,48 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        _status ? _getEditIcon() : Container(),
+                        _getEditIcon(),
                       ],
                     )
                   ],
                 )),
             Padding(
-              padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(child: _labelText("First Name")),
-                  Expanded(child: _labelText("Last Name")),
-                ],
+                padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                child: _labelText("Username")),
+            Padding(
+              padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Username",
+                ),
+                enabled: !_status,
+                controller: _usernameController,
+                validator: requiredValidator,
               ),
             ),
             Padding(
+                padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                child: _labelText('Email ')),
+            Padding(
                 padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Flexible(
-                      child: TextFormField(
-                        decoration:
-                            InputDecoration(hintText: "Enter First Name"),
-                        enabled: !_status,
-                        validator: emailValidator,
-                        controller: _firstNameController,
-                      ),
-                    ),
-                    Flexible(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Enter Last Name",
-                        ),
-                        enabled: !_status,
-                        controller: _lastNameController,
-                        validator: requiredValidator,
-                      ),
-                    ),
-                  ],
+                child: TextFormField(
+                  decoration: const InputDecoration(hintText: "Enter Email"),
+                  enabled: !_status,
+                  controller: _emailController,
+                  validator: emailValidator,
                 )),
             Padding(
                 padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[_labelText('Email ')],
-                    ),
-                  ],
-                )),
+                child: _labelText("Mobile")),
             Padding(
                 padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Flexible(
-                      child: TextFormField(
-                        decoration:
-                            const InputDecoration(hintText: "Enter Email"),
-                        enabled: !_status,
-                        controller: _emailController,
-                        validator: emailValidator,
-                      ),
-                    ),
-                  ],
-                )),
-            Padding(
-                padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[_labelText("Mobile")],
-                    ),
-                  ],
-                )),
-            Padding(
-                padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Flexible(
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: "Enter Mobile Number",
-                        ),
-                        enabled: !_status,
-                        validator: phoneValidator,
-                        controller: _phoneNumberController,
-                      ),
-                    ),
-                  ],
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Enter Mobile Number",
+                  ),
+                  enabled: !_status,
+                  validator: phoneValidator,
+                  controller: _phoneNumberController,
                 )),
             !_status ? _getActionButtons() : Container(),
           ],
@@ -243,16 +190,6 @@ class _ProfilePageState extends State<ProfilePage> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(left: 10.0),
-              // child: cancelButton(
-              //   context,
-              //   "Cancel",
-              //   () {
-              //     setState(() {
-              //       _status = true;
-              //       FocusScope.of(context).requestFocus(FocusNode());
-              //     });
-              //   },
-              // )
             ),
             flex: 2,
           ),
@@ -274,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       onTap: () {
         setState(() {
-          _status = false;
+          _status = !_status;
         });
       },
     );

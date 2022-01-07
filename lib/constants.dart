@@ -14,5 +14,5 @@ class AppRoutes {
   static const packageDetail = "/packageDetails";
 }
 
-String ipAddress = "http://147.182.225.253/";
+const URL = "https://courier-ke.herokuapp.com/";
 int timeout = 100000;

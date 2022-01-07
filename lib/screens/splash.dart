@@ -25,7 +25,7 @@ class SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Mat'ndogo".toUpperCase(),
+              "Courier Services".toUpperCase(),
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,

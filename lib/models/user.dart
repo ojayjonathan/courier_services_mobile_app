@@ -1,26 +1,20 @@
 class User {
   //return user object from json
-  final int userId;
   final String email;
-  final String firstName;
-  final String lastName;
+  final String userName;
   final String phoneNumber;
-  final String profileImage;
+  final String? profileImage;
 
   User(
-      {required this.userId,
-      required this.email,
-      required this.firstName,
-      required this.lastName,
+      {required this.email,
+      required this.userName,
       required this.profileImage,
       required this.phoneNumber});
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        userId: json["user"]['id'],
-        email: json["user"]["email"],
-        lastName: json["user"]["last_name"],
-        firstName: json["user"]["first_name"],
+        email: json["email"],
         phoneNumber: (json["phone_number"] as String).replaceAll("+254", "0"),
-        profileImage: json["profile_image"]);
+        profileImage: json["profile_image"],
+        userName: json["username"]);
   }
 }

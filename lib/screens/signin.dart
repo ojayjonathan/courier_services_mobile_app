@@ -1,3 +1,6 @@
+import 'package:courier_services/constants.dart';
+import 'package:courier_services/services/auth.dart';
+import 'package:courier_services/utils/validators.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/button/button.dart';
 import '../../widgets/defultInput/inputField.dart';
@@ -5,18 +8,44 @@ import '../theme.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({Key? key}) : super(key: key);
-  final TextEditingController emailTextController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  String? validator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This value is required';
-    }
-    return null;
-  }
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    void login() async {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        "Please wait...",
+        style: TextStyle(color: ColorTheme.successColor),
+      )));
+      if (_formKey.currentState!.validate()) {
+        final res = await Auth.loginUser({
+          "email": _emailController.text,
+          "password": _passwordController.text
+        });
+        res.fold((l) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).pushNamed(AppRoutes.home);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+            "Login successfuly",
+            style: TextStyle(color: ColorTheme.successColor),
+          )));
+        }, (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                error.message,
+                style: TextStyle(color: Theme.of(context).errorColor),
+              ),
+            ),
+          );
+        });
+      }
+    }
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -46,6 +75,7 @@ class SignIn extends StatelessWidget {
             height: 20,
           ),
           Form(
+            key: _formKey,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -54,19 +84,15 @@ class SignIn extends StatelessWidget {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: DefaultInput(
-                        controller: emailTextController,
+                        controller: _emailController,
                         hintText: 'email',
-                        validator: validator,
+                        validator: emailValidator,
                         icon: Icons.email_outlined,
                       )),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      child: DefaultInput(
-                        controller: emailTextController,
-                        hintText: 'password',
-                        validator: validator,
-                        isPassword: true,
-                        icon: Icons.lock,
+                      child: PasswordField(
+                        _passwordController,
                       )),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
@@ -84,9 +110,7 @@ class SignIn extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: DefaultButton(
-                      handlePress: () {
-                        Navigator.pushNamed(context, '/');
-                      },
+                      handlePress: login,
                       text: 'Log in',
                     ),
                   ),
@@ -99,7 +123,7 @@ class SignIn extends StatelessWidget {
                               style: TextStyle(color: Colors.grey)),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/signup');
+                              Navigator.pushNamed(context, AppRoutes.signup);
                             },
                             child: Text('Sign up for a new account',
                                 style: TextStyle(

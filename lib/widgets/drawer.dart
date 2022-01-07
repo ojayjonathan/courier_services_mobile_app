@@ -1,6 +1,7 @@
 import 'package:courier_services/constants.dart';
 import 'package:courier_services/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -47,17 +48,16 @@ class AppDrawer extends StatelessWidget {
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.home),
             ),
             ListTile(
-              leading: Icon(Icons.account_box_rounded,
+              leading: Icon(Icons.feedback,
                   color: ColorTheme.primaryColor),
-              title: Text('Account'),
-              onTap: () => Navigator.of(context).pushNamed(AppRoutes.profile),
+              title: Text('Feedback'),
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.feedback),
             ),
             ListTile(
-              leading: Icon(Icons.legend_toggle_sharp,
+              leading: Icon(Icons.phone,
                   color: ColorTheme.primaryColor),
-              title: Text('Orders'),
-              onTap: () =>
-                  Navigator.of(context).pushNamed(AppRoutes.shipmentHistory),
+              title: Text('Contact'),
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.support),
             ),
             Divider(
               height: 1,
@@ -66,12 +66,31 @@ class AppDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Label',
+                'Account',
               ),
             ),
             ListTile(
-              leading: Icon(Icons.bookmark, color: ColorTheme.primaryColor),
-              title: Text('Item A'),
+              leading: Icon(Icons.account_box_rounded,
+                  color: ColorTheme.primaryColor),
+              title: Text('Account'),
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.profile),
+            ),
+            ListTile(
+              leading: Icon(Icons.bookmark_outlined,
+                  color: ColorTheme.primaryColor),
+              title: Text('Orders'),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.shipmentHistory),
+            ),
+            ListTile(
+              leading: Icon(Icons.logout, color: ColorTheme.primaryColor),
+              title: Text('Logout'),
+              onTap: () async {
+                SharedPreferences _pref = await SharedPreferences.getInstance();
+                _pref.clear();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context).pushNamed(AppRoutes.signin);
+              },
             ),
           ],
         ),

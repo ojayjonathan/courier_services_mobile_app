@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 
-class Failure {
+class ErrorMessage {
   final String message;
   final int statusCode;
-  Failure(this.message, this.statusCode);
+  ErrorMessage(this.message, this.statusCode);
   @override
   String toString() => message;
 }
 
-Failure getException(error) {
-  print(error);
+ErrorMessage getException(error) {
   Map<String, dynamic> response;
   if (error is Exception) {
     try {
@@ -40,13 +39,22 @@ Failure getException(error) {
                 };
                 break;
               case 401:
-                response = {"message": "unauthorized", "statusCode": 401};
+                response = {
+                  "message": "unauthorized",
+                  "statusCode": 401,
+                };
                 break;
               case 403:
-                response = {"message": "unauthorized", "statusCode": 403};
+                response = {
+                  "message": "unauthorized",
+                  "statusCode": 403,
+                };
                 break;
               case 404:
-                response = {"message": "not found", "statusCode": 404};
+                response = {
+                  "message": "Server resource not found",
+                  "statusCode": 404
+                };
                 break;
               case 408:
                 response = {"message": "Request timeout", "statusCode": 408};
@@ -84,7 +92,7 @@ Failure getException(error) {
       } else {
         response = {"message": "Unexpected error occured", "statusCode": 408};
       }
-      return Failure(response["message"], response["statusCode"]);
+      return ErrorMessage(response["message"], response["statusCode"]);
     } catch (_) {
       response = {"message": "Unexpected error occured", "statusCode": 408};
     }
@@ -95,5 +103,5 @@ Failure getException(error) {
       response = {"message": "Unexpected error occured", "statusCode": 408};
     }
   }
-  return Failure(response["message"], response["statusCode"]);
+  return ErrorMessage(response["message"], response["statusCode"]);
 }

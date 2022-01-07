@@ -10,23 +10,20 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  
-
   Widget _title() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Courier Services",
-          textAlign: TextAlign.center,
-
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 28),
-        ),
-        Text(
           "Cargo delivery services",
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 15),
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        Text(
+          "Courier Services",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 28),
         ),
       ],
     );
@@ -108,8 +105,10 @@ class _WelcomePageState extends State<WelcomePage> {
         style: Styles.buttonStyle.copyWith(
           backgroundColor:
               MaterialStateProperty.all(ColorTheme.backgroundColor),
-          side: MaterialStateProperty.all(
-              BorderSide(color: ColorTheme.primary3Color,width: 2)),
+          side: MaterialStateProperty.all(BorderSide(
+            color: ColorTheme.primary3Color,
+            width: 2,
+          )),
         ),
       ),
     );

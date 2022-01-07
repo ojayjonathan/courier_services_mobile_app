@@ -1,22 +1,57 @@
+import 'package:courier_services/constants.dart';
+import 'package:courier_services/services/auth.dart';
 import 'package:courier_services/theme.dart';
+import 'package:courier_services/utils/validators.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/button/button.dart';
 import '../../widgets/defultInput/inputField.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
-  final TextEditingController emailTextController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  String? validator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This value is required';
-    }
-    return null;
-  }
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    void register() async {
+      if (_formKey.currentState!.validate()) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Please wait...",
+          style: TextStyle(color: ColorTheme.successColor),
+        )));
+        final res = await Auth.registerUser(
+          {
+            "email": _emailController.text,
+            "phone_number": "+254" + _phoneController.text.substring(1),
+            "username": _usernameController.text,
+            "password": _passwordController.text
+          },
+        );
+        res.fold((l) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).pushNamed(AppRoutes.home);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+            "Account created successfuly",
+            style: TextStyle(color: ColorTheme.successColor),
+          )));
+        }, (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                error.message,
+                style: TextStyle(color: Theme.of(context).errorColor),
+              ),
+            ),
+          );
+        });
+      }
+    }
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -52,6 +87,7 @@ class SignUp extends StatelessWidget {
             height: 20,
           ),
           Form(
+            key: _formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
@@ -60,27 +96,31 @@ class SignUp extends StatelessWidget {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: DefaultInput(
-                        controller: emailTextController,
+                        controller: _usernameController,
                         hintText: 'User Name',
-                        validator: validator,
+                        validator: requiredValidator,
                         icon: Icons.person_outline,
                       )),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: DefaultInput(
-                        controller: emailTextController,
+                        controller: _emailController,
                         hintText: 'Email',
-                        validator: validator,
+                        validator: requiredValidator,
                         icon: Icons.email_outlined,
                       )),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: DefaultInput(
-                        controller: emailTextController,
-                        hintText: 'Password',
-                        validator: validator,
-                        isPassword: true,
-                        icon: Icons.lock_outline,
+                        controller: _phoneController,
+                        hintText: 'Phone number',
+                        validator: phoneValidator,
+                        icon: Icons.phone,
+                      )),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: PasswordField(
+                        _passwordController,
                       )),
                   SizedBox(
                     height: 30,
@@ -88,10 +128,7 @@ class SignUp extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: DefaultButton(
-                      handlePress: () {
-                        print('testroute');
-                        Navigator.pushNamed(context, '/signin');
-                      },
+                      handlePress: register,
                       text: 'Sign Up',
                     ),
                   ),
@@ -104,7 +141,7 @@ class SignUp extends StatelessWidget {
                                 style: TextStyle(color: Colors.grey)),
                             InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, '/signin');
+                                Navigator.pushNamed(context, AppRoutes.signin);
                               },
                               child: Text('Login now',
                                   style: TextStyle(
