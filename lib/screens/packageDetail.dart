@@ -11,9 +11,9 @@ class PackageDetail extends StatefulWidget {
 }
 
 class _PackageDetailState extends State<PackageDetail> {
-  final TextEditingController _origin = TextEditingController();
+  final TextEditingController _pickup = TextEditingController();
 
-  final TextEditingController _destination = TextEditingController();
+  final TextEditingController _dropoff = TextEditingController();
   int? _natureOfGoods = 0;
   List<bool> checked = [true, true, false, false, true];
   @override
@@ -29,14 +29,14 @@ class _PackageDetailState extends State<PackageDetail> {
             child: Column(
               children: [
                 DefaultInput(
-                  hintText: "Origin",
-                  controller: _origin,
+                  hintText: "pickup",
+                  controller: _pickup,
                   validator: requiredValidator,
                   icon: Icons.location_on,
                 ),
                 DefaultInput(
-                  hintText: "Destination",
-                  controller: _destination,
+                  hintText: "dropoff",
+                  controller: _dropoff,
                   validator: requiredValidator,
                   icon: Icons.send,
                 ),
