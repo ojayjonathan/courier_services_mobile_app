@@ -18,40 +18,31 @@ class Suggestion {
 }
 
 class Place {
-  String? streetNumber;
   String? street;
   String? city;
-  String? zipCode;
   String? name;
   LatLng? latLng;
   String country = "Kenya";
 
   Place({
-    this.streetNumber,
     this.street,
     this.city,
-    this.zipCode,
     this.name,
     this.latLng,
   });
 
   @override
   String toString() {
-    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, zipCode: $zipCode, latLng:$latLng, name:$name)';
+    return 'Place( street: $street, city: $city,  latLng:$latLng, name:$name)';
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       "street": street,
       "city": city,
-      "country": country,
-      "zip_code": zipCode,
-      "street_number": streetNumber,
       "name": name,
-      "geometry": {
-        "lat": latLng?.latitude,
-        "lng": latLng?.longitude,
-      }
+      "lat": latLng?.latitude,
+      "lng": latLng?.longitude,
     };
   }
 
@@ -62,8 +53,6 @@ class Place {
       name: json["name"],
       street: json["street"],
       city: json["city"],
-      zipCode: json["zip_code"],
-      streetNumber: json["street_number"],
     );
   }
 }

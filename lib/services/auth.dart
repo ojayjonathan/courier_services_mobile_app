@@ -54,8 +54,9 @@ class Auth {
       String? authToken = _prefs.getString("authToken");
       var _profile = await dio.put("${URL}api/customer/profile/",
           options: Options(
-              headers: {'Authorization': 'Token $authToken'},
-              sendTimeout: timeout),
+            headers: {'Authorization': 'Token $authToken'},
+            sendTimeout: timeout,
+          ),
           data: jsonEncode(data));
       print(_profile.data);
       _prefs.setString("user", jsonEncode(_profile.data));
@@ -68,7 +69,8 @@ class Auth {
   static Future<Either<Map<String, dynamic>, ErrorMessage>> resetPassword(
       {required Map<String, dynamic> data}) async {
     try {
-      final res = await dio.post("${URL}api/auth/reset/", data: jsonEncode(data));
+      final res =
+          await dio.post("${URL}api/auth/reset/", data: jsonEncode(data));
       return Left(res.data as Map<String, dynamic>);
     } catch (e) {
       return Right(

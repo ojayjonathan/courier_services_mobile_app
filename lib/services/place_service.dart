@@ -47,17 +47,12 @@ class PlaceApiProvider {
       //construct place from google map api result
       components.forEach((c) {
         final List type = c['types'];
-        if (type.contains('street_number')) {
-          place.streetNumber = c['long_name'];
-        }
+
         if (type.contains('route')) {
           place.street = c['long_name'];
         }
         if (type.contains('locality')) {
           place.city = c['long_name'];
-        }
-        if (type.contains('postal_code')) {
-          place.zipCode = c['long_name'];
         }
       });
       //set place name
