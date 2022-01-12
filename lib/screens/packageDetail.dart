@@ -1,4 +1,6 @@
 import 'package:courier_services/constants.dart';
+import 'package:courier_services/models/shipment.dart';
+import 'package:courier_services/screens/confirmshipment.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/utils/validators.dart';
 import 'package:courier_services/widgets/button/button.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 class PackageDetail extends StatefulWidget {
   @override
   State<PackageDetail> createState() => _PackageDetailState();
+  final Shipment shipment;
+  PackageDetail(this.shipment);
 }
 
 class _PackageDetailState extends State<PackageDetail> {
@@ -16,6 +20,30 @@ class _PackageDetailState extends State<PackageDetail> {
   final TextEditingController _dropoff = TextEditingController();
   int? _natureOfGoods = 0;
   List<bool> checked = [true, true, false, false, true];
+  String size = "S";
+  @override
+  void initState() {
+    _pickup.text =
+        "${widget.shipment.origin?.name}";
+    _dropoff.text =
+        "${widget.shipment.destination?.name}}";
+    super.initState();
+  }
+
+  void _toNextScreen() {
+    widget.shipment.cargo = Cargo(
+      size,
+      _natureOfGoods == 1 ? "F" : "NF",
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ConfirmShipment(
+          shipment: widget.shipment,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +57,17 @@ class _PackageDetailState extends State<PackageDetail> {
             child: Column(
               children: [
                 DefaultInput(
-                  hintText: "pickup",
-                  controller: _pickup,
-                  validator: requiredValidator,
-                  icon: Icons.location_on,
-                ),
+                    hintText: "pickup",
+                    controller: _pickup,
+                    validator: requiredValidator,
+                    icon: Icons.location_on,
+                    readOnly: true),
                 DefaultInput(
-                  hintText: "dropoff",
-                  controller: _dropoff,
-                  validator: requiredValidator,
-                  icon: Icons.send,
-                ),
+                    hintText: "dropoff",
+                    controller: _dropoff,
+                    validator: requiredValidator,
+                    icon: Icons.send,
+                    readOnly: true),
                 SizedBox(
                   height: 20,
                 ),
@@ -51,13 +79,12 @@ class _PackageDetailState extends State<PackageDetail> {
                       Checkbox(
                         onChanged: (bool? value) {
                           setState(() {
-                            if (value != null) {
-                              checked[0] = value;
+                            if (value == true) {
+                              size = "S";
                             }
                           });
                         },
-                        // tristate: 1 == 1,
-                        value: checked[0],
+                        value: size == "S",
                         activeColor: ColorTheme.primaryColor,
                       ),
                       Text(
@@ -75,17 +102,17 @@ class _PackageDetailState extends State<PackageDetail> {
                       Checkbox(
                         onChanged: (bool? value) {
                           setState(() {
-                            if (value != null) {
-                              checked[1] = value;
+                            if (value == true) {
+                              size = "M";
                             }
                           });
                         },
                         // tristate: 1 == 1,
-                        value: checked[1],
+                        value: size == "M",
                         activeColor: ColorTheme.primaryColor,
                       ),
                       Text(
-                        'Large ${"\t" * 5} (Above 3 tones)',
+                        'Medium ${"\t" * 5} (101kg - 3 tones)',
                         style: TextStyle(color: ColorTheme.dark[2]),
                       ),
                     ],
@@ -99,17 +126,16 @@ class _PackageDetailState extends State<PackageDetail> {
                       Checkbox(
                         onChanged: (bool? value) {
                           setState(() {
-                            if (value != null) {
-                              checked[1] = value;
+                            if (value == true) {
+                              size = "L";
                             }
                           });
                         },
-                        // tristate: 1 == 1,
-                        value: checked[1],
+                        value: size == "L",
                         activeColor: ColorTheme.primaryColor,
                       ),
                       Text(
-                        'Medium ${"\t" * 5} (101kg - 3 tones)',
+                        'Large ${"\t" * 5} (Above 3 tones)',
                         style: TextStyle(color: ColorTheme.dark[2]),
                       ),
                     ],
@@ -124,8 +150,7 @@ class _PackageDetailState extends State<PackageDetail> {
                   height: 20,
                 ),
                 DefaultButton(
-                  handlePress: () => Navigator.of(context)
-                      .pushNamed(AppRoutes.confirmShipment),
+                  handlePress: _toNextScreen,
                   text: "Continue",
                 )
               ],
@@ -157,7 +182,7 @@ class _PackageDetailState extends State<PackageDetail> {
               items: [
                 DropdownMenuItem(
                   value: 0,
-                  child: Text("Select issue category"),
+                  child: Text("Select package nature"),
                 ),
                 DropdownMenuItem(
                   value: 1,
@@ -165,13 +190,13 @@ class _PackageDetailState extends State<PackageDetail> {
                 ),
                 DropdownMenuItem(
                   value: 2,
-                  child: Text("Perishable"),
+                  child: Text("Not Fragile"),
                 ),
               ],
               onChanged: (i) {
-                // setState(() {
-                //   _natureOfGoods = i;
-                // });
+                setState(() {
+                  _natureOfGoods = i;
+                });
               },
             ),
           ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:courier_services/models/location.dart';
 
 class Shipment {
@@ -36,7 +38,7 @@ class Shipment {
         origin: Place.fromJson(json['origin']),
         destination: Place.fromJson(json['destination']),
         vehicle: json['vehicle'],
-        price: json['price'],
+        price: double.parse(json['price'].toString()),
         status_: json['status'],
         shipmentDate: json['shipment_date']);
   }
@@ -45,12 +47,17 @@ class Shipment {
     return {
       "cargo": cargo?.toJson(),
       'vehicle': this.vehicle,
-      'price': this.price,
-      'status': this.status_,
+      'price': this.price ?? 0.0,
+      'status': this.status_ ?? "P",
       'shipment_date': this.shipmentDate,
       "origin": this.origin?.toJson(),
       "destination": this.destination?.toJson(),
     };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this.toJson());
   }
 }
 
@@ -62,9 +69,10 @@ class Cargo {
 
   Cargo(this.size_, this.nature_);
   String get size {
-    return sizes[size.toUpperCase()]!;
+    return sizes[size_.toUpperCase()]!;
   }
 
+  String get nature => nature_ == "F" ? "Fragile" : "Not Fragile";
   factory Cargo.fromJson(Map<String, dynamic> json) {
     return Cargo(
       json['size'],
@@ -77,5 +85,10 @@ class Cargo {
       "size": this.size_,
       "nature": this.nature_,
     };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this.toJson());
   }
 }

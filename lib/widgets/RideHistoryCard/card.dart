@@ -1,12 +1,11 @@
+import 'package:courier_services/models/shipment.dart';
+import 'package:courier_services/theme.dart';
+import 'package:courier_services/widgets/ratingBar/ratingBar.dart';
 import 'package:flutter/material.dart';
 
-import '../../theme.dart';
-import '../../models/rideModel.dart';
-import '../../widgets/ratingBar/ratingBar.dart';
-
 class HistoryCard extends StatelessWidget {
-  final RideModel ride;
-  const HistoryCard({Key? key, required this.ride}) : super(key: key);
+  final Shipment shipment;
+  const HistoryCard({Key? key, required this.shipment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,8 @@ class HistoryCard extends StatelessWidget {
                         Icon(Icons.location_on),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(this.ride.from),
+                          child: Text(
+                              "${shipment.origin?.city ?? shipment.origin?.street}"),
                         ),
                       ],
                     ),
@@ -61,7 +61,8 @@ class HistoryCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(this.ride.to),
+                          child: Text(
+                              "${shipment.destination?.city ?? shipment.destination?.street}"),
                         ),
                       ],
                     )
@@ -71,15 +72,15 @@ class HistoryCard extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(this.ride.date),
+                  Text("${this.shipment.shipmentDate}"),
                   SizedBox(
                     height: 12,
                   ),
-                  ratingBar(rating: this.ride.rating, size: 15),
+                  ratingBar(rating: 5, size: 15),
                   SizedBox(
                     height: 12,
                   ),
-                  Text(this.ride.price)
+                  Text("${this.shipment.price}")
                 ],
               )
             ],

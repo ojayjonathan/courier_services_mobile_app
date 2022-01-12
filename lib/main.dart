@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: AppRoutes.splash,
+
       routes: {
         AppRoutes.rating: (_) => RatingScreen(),
         AppRoutes.shipmentHistory: (_) => RideHistory(),
@@ -46,8 +47,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.welcome: (_) => WelcomePage(),
         AppRoutes.profile: (_) => AccountPage(),
         AppRoutes.support: (_) => ContactUs(),
-        AppRoutes.packageDetail: (_) => PackageDetail(),
-        AppRoutes.confirmShipment: (_) => ConfirmShipment(),
+       
       },
     );
   }

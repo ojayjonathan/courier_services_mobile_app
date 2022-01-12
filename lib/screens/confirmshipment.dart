@@ -1,12 +1,35 @@
+import 'package:courier_services/constants.dart';
+import 'package:courier_services/models/shipment.dart';
+import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/widgets/button/button.dart';
+
 import 'package:flutter/material.dart';
 
 class ConfirmShipment extends StatelessWidget {
-  const ConfirmShipment({Key? key}) : super(key: key);
+  final Shipment shipment;
+  ConfirmShipment({required this.shipment});
+  final ShipmentApiProvider _service = ShipmentApiProvider();
 
   @override
   Widget build(BuildContext context) {
+    void _confirmShipment() {
+      //TODO: integrate payments
+      _service.create(shipment.toJson()).then((res) => res.fold((l) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).pushNamed(AppRoutes.shipmentHistory);
+          }, (r) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  r.message,
+                  style: TextStyle(color: Theme.of(context).errorColor),
+                ),
+              ),
+            );
+          }));
+    }
+
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
@@ -32,7 +55,7 @@ class ConfirmShipment extends StatelessWidget {
                         children: [
                           _circle(),
                           Container(
-                            height: 30,
+                            height: 50,
                             margin: EdgeInsets.only(
                                 left: 10, top: 0, right: 0, bottom: 0),
                             child: Column(
@@ -62,22 +85,28 @@ class ConfirmShipment extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Njoro",
+                              "${this.shipment.origin?.city ?? this.shipment.origin?.street}",
                               style: TextStyle(
                                   color: ColorTheme.dark[1],
                                   fontWeight: FontWeight.w500),
                             ),
-                            Text("Cbd street 1"),
+                            Text(
+                              "${this.shipment.origin?.name}",
+                              style: TextStyle(fontSize: 14),
+                            ),
                             SizedBox(
                               height: 5,
                             ),
                             Text(
-                              "Nakuru",
+                              "${this.shipment.destination?.city ?? this.shipment.destination?.street}",
                               style: TextStyle(
                                   color: ColorTheme.dark[1],
                                   fontWeight: FontWeight.w500),
                             ),
-                            Text("Cbd street 1"),
+                            Text(
+                              "${this.shipment.destination?.name}",
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ],
                         ),
                       )
@@ -99,14 +128,14 @@ class ConfirmShipment extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Size: Small ",
+                          "Size: ${this.shipment.cargo?.size}",
                           style: TextStyle(color: ColorTheme.dark[2]),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Nature: Fragile",
+                          "Nature: ${this.shipment.cargo?.nature}",
                           style: TextStyle(color: ColorTheme.dark[2]),
                         ),
                       )
@@ -125,7 +154,7 @@ class ConfirmShipment extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                              text: "KES 3000",
+                              text: "${this.shipment.price}",
                               style: TextStyle(color: ColorTheme.primaryColor)),
                           TextSpan(
                             text: "\t\t Pending",
@@ -151,8 +180,8 @@ class ConfirmShipment extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.all(8),
                       child: DefaultButton(
-                        handlePress: () {},
-                        text: "I CONFIRM",
+                        handlePress: _confirmShipment,
+                        text: "Proceed to payment",
                       ),
                     )
                   ],

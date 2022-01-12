@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:courier_services/conf.dart';
 import 'package:courier_services/models/location.dart';
 import 'package:courier_services/services/exception.dart';
 import 'package:dartz/dartz.dart';
@@ -13,7 +14,7 @@ class PlaceApiProvider {
 
   final sessionToken;
 
-  static final String androidKey = androidKey;
+  static final String androidKey = APIKey;
   static final String iosKey = 'AIzaSyCyxrs2FWQ8pHgQMhS2rFDw-hPui1pLiAg';
   final apiKey = Platform.isAndroid ? androidKey : iosKey;
 

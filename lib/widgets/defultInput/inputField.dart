@@ -9,6 +9,7 @@ class DefaultInput extends StatelessWidget {
   final bool isPassword;
   final IconData icon;
   final FocusNode? focusNode;
+  final bool readOnly;
   const DefaultInput(
       {Key? key,
       required this.hintText,
@@ -16,6 +17,7 @@ class DefaultInput extends StatelessWidget {
       required this.validator,
       required this.icon,
       this.focusNode,
+      this.readOnly = false,
       this.isPassword = false})
       : super(key: key);
 
@@ -27,9 +29,11 @@ class DefaultInput extends StatelessWidget {
         focusNode: focusNode,
         obscureText: this.isPassword,
         textAlign: TextAlign.start,
+        readOnly: readOnly,
         decoration: InputDecoration(
             prefixIcon: Icon(
               this.icon,
+              color: readOnly ? ColorTheme.primaryColor : null,
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             hintText: this.hintText,

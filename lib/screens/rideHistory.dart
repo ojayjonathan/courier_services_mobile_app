@@ -1,65 +1,68 @@
+import 'package:courier_services/models/shipment.dart';
+import 'package:courier_services/services/shipment_service.dart';
+import 'package:courier_services/theme.dart';
+import 'package:courier_services/widgets/RideHistoryCard/card.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
-import '../models/rideModel.dart';
-import '../widgets/RideHistoryCard/card.dart';
-
 class RideHistory extends StatelessWidget {
-  const RideHistory({Key? key}) : super(key: key);
-  Widget showHistory(BuildContext ctx, int index) {
-    return HistoryCard(ride: history[index]);
-  }
-
+  RideHistory({Key? key}) : super(key: key);
+  final _apiProvider = ShipmentApiProvider();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text('Ride History'),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.notifications),
-            )
-          ],
-          automaticallyImplyLeading: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: Text('Ride History'),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications),
+          )
+        ],
+        automaticallyImplyLeading: true,
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Showing Recent Rides',
+                style: TextStyle(
+                    color: ColorTheme.primaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: FutureBuilder(
+                  future: _apiProvider.customerShipments(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Shipment> shipments =
+                          snapshot.data as List<Shipment>;
+                      return ListView.builder(
+                          itemBuilder: (_, index) =>
+                              HistoryCard(shipment: shipments[index]),
+                          itemCount: shipments.length);
+                    }
+                    return snapshot.hasError
+                        ? Text(snapshot.error.toString())
+                        : Center(
+                            child: CircularProgressIndicator(
+                              color: ColorTheme.primaryColor,
+                            ),
+                          );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-        body: SafeArea(
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Showing Recent Rides',
-                      style: TextStyle(
-                          color: ColorTheme.primaryColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    Container(
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        child: ListView.builder(
-                            itemBuilder: showHistory,
-                            itemCount: history.length))
-                  ],
-                ))));
+      ),
+    );
   }
 }
-
-List<RideModel> history = [
-  RideModel(
-      from: 'home',
-      to: 'city Market',
-      date: '01 may 2021',
-      rating: 4.5,
-      price: 'ksh 1000'),
-  RideModel(
-      from: 'home',
-      to: 'Sarit Center',
-      date: '10 Aug 2021',
-      rating: 3.0,
-      price: 'ksh 1000')
-];

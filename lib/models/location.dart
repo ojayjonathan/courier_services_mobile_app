@@ -1,4 +1,6 @@
 // For storing our result
+import 'dart:convert';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Suggestion {
@@ -33,21 +35,22 @@ class Place {
 
   @override
   String toString() {
-    return 'Place( street: $street, city: $city,  latLng:$latLng, name:$name)';
+    return jsonEncode(this.toJson());
   }
 
   Map<String, dynamic> toJson() {
     return {
       "street": street,
-      "city": city,
+      "city": city ?? street,
       "name": name,
-      "lat": latLng?.latitude,
-      "lng": latLng?.longitude,
+      "lat": latLng?.latitude.toStringAsFixed(10),
+      "lng": latLng?.longitude.toStringAsFixed(10),
     };
   }
 
   factory Place.fromJson(Map<String, dynamic> json) {
-    LatLng latLng = LatLng(json["lat"], json["lng"]);
+    LatLng latLng =
+        LatLng(double.parse(json["lat"]), double.parse(json["lng"]));
     return Place(
       latLng: latLng,
       name: json["name"],
