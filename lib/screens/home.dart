@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:math';
 
+import 'package:courier_services/conf.dart';
 import 'package:courier_services/models/carriage.dart';
 import 'package:courier_services/models/location.dart';
 import 'package:courier_services/models/shipment.dart';
@@ -9,12 +9,14 @@ import 'package:courier_services/screens/packageDetail.dart';
 import 'package:courier_services/services/place_service.dart';
 import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
+import 'package:courier_services/utils/map_utils.dart';
 import 'package:courier_services/utils/validators.dart';
 import 'package:courier_services/widgets/button/button.dart';
 import 'package:courier_services/widgets/drawer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../widgets/defultInput/inputField.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -40,6 +42,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Place? pickup;
   Place? dropoff;
   bool _showNextButton = false;
+  // Object for PolylinePoints
+  late PolylinePoints polylinePoints;
+
+// List of coordinates to join
+  List<LatLng> polylineCoordinates = [];
+
+// Map storing polylines created by connecting two points
+  List<Polyline> polylines = [];
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +76,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget buildMap(BuildContext context) {
     return GoogleMap(
       markers: Set.from(_markers),
+      polylines: Set<Polyline>.of(polylines),
       mapType: MapType.normal,
       zoomGesturesEnabled: true,
       tiltGesturesEnabled: true,
@@ -132,15 +144,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           position: dropoff!.latLng!),
                     );
                   }
-                  CameraPosition update = CameraPosition(
-                    target: _place.latLng!,
-                    tilt: 45,
-                    zoom: 10.0,
-                  );
-                  _mapController.future.then(
-                    (_controller) => _controller
-                        .animateCamera(CameraUpdate.newCameraPosition(update)),
-                  );
+
+                  _mapController.future.then((_controller) {
+                    if (dropoff != null && pickup != null) {
+                      // Accommodate the two locations within the
+                      // camera view of the map
+                      polylines.clear();
+                      _createPolylines(dropoff!.latLng!, pickup!.latLng!);
+
+                      _controller.animateCamera(
+                        CameraUpdate.newLatLngBounds(
+                          latLngBounds(pickup!.latLng!, dropoff!.latLng!),
+                          100.0,
+                        ),
+                      );
+                    } else {
+                      CameraPosition update = CameraPosition(
+                        target: _place.latLng!,
+                        tilt: 45,
+                        zoom: 10.0,
+                      );
+                      _controller.animateCamera(
+                        CameraUpdate.newCameraPosition(update),
+                      );
+                    }
+                  });
                   setState(() {});
                 }, (r) => null));
       }
@@ -367,15 +395,47 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       trailing: Text("Ksh 700"),
     );
   }
-}
+  
+  // Create the polylines for showing the route between two places
 
-//using haversine formular to calculate distance between two geo-coordinates
-double calculateDistance(LatLng point1, LatLng point2) {
-  double lat1_rad = point1.latitude / (180 / pi);
-  double lng1_rad = point1.longitude / (180 / pi);
-  double lat2_rad = point2.latitude / (180 / pi);
-  double lng2_rad = point2.longitude / (180 / pi);
-  //Earth radius in kms
-  double earth_radius = 6371;
-  return 0;
+  _createPolylines(LatLng p1, LatLng p2) {
+    // Initializing PolylinePoints
+    polylinePoints = PolylinePoints();
+
+    // Generating the list of coordinates to be used for
+    // drawing the polylines
+    polylinePoints
+        .getRouteBetweenCoordinates(
+      APIKey, // Google Maps API Key
+      PointLatLng(p1.latitude, p1.longitude),
+      PointLatLng(p2.latitude, p2.longitude),
+      travelMode: TravelMode.transit,
+    )
+        .then(
+      (result) {
+        // Adding the coordinates to the list
+        if (result.points.isNotEmpty) {
+          polylineCoordinates.clear();
+          for (int i = 0; i < result.points.length; i++) {
+            PointLatLng point = result.points[i];
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          }
+        }
+        // Defining an ID
+        PolylineId id = PolylineId(randomString(10));
+        // Initializing Polyline
+        Polyline polyline = Polyline(
+          polylineId: id,
+          color: Colors.red,
+          points: polylineCoordinates,
+          width: 3,
+        );
+
+        // Adding the polyline to the map
+
+        polylines.add(polyline);
+        setState(() {});
+      },
+    );
+  }
 }

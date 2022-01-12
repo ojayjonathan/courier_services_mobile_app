@@ -47,8 +47,9 @@ class ConfirmShipment extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   width: MediaQuery.of(context).size.width,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,8 @@ class ConfirmShipment extends StatelessWidget {
                       ),
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
