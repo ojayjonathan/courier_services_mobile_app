@@ -14,6 +14,9 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+      ),
       body: Container(
           height: MediaQuery.of(context).size.height,
           child: Stack(
@@ -80,9 +83,8 @@ class ContactUs extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                              onTap: () =>
-                                  _call("mailto:matndogo254@gmail.com"),
-                              child: Text("matndogo254@gmail.com"))
+                              onTap: () => _call("mailto:courier.ke.com"),
+                              child: Text("courier.ke.com"))
                         ],
                       ),
                     ),
