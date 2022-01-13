@@ -49,7 +49,7 @@ class ConfirmShipment extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    
+                
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
