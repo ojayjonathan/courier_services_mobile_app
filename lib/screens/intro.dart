@@ -15,7 +15,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     Navigator.of(context).pushNamed(AppRoutes.welcome);
   }
 
-  Widget _buldSvg(String assetName) {
+  Widget _buldImage(String assetName) {
     return Image.asset(
       "assets/images/$assetName",
       width: 350,
@@ -41,27 +41,27 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           title: "Welcome",
-          body: "Commute in real-time with fun",
-          image: _buldSvg("intro_p1.svg"),
+          body: "We do country wide cargo delivery",
+          image: _buldImage("intro_p1.png"),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Get started",
           body: "Create an  account to get started.",
-          image: _buldSvg("taxi.svg"),
+          image: _buldImage("truck.png"),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Make a booking",
           body: "Booking made easier with a click of a button .",
-          image: _buldSvg("intro_p3_.svg"),
+          image: _buldImage("intro_p3_.png"),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Get notified",
           body:
               " Track available services with our 24/7 updates through our socials.",
-          image: _buldSvg("intro_p3.svg"),
+          image: _buldImage("intro_p3.png"),
           decoration: pageDecoration,
         ),
       ],
