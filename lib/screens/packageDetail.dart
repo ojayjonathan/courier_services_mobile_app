@@ -26,7 +26,7 @@ class _PackageDetailState extends State<PackageDetail> {
     _pickup.text =
         "${widget.shipment.origin?.name}";
     _dropoff.text =
-        "${widget.shipment.destination?.name}}";
+        "${widget.shipment.destination?.name}";
     super.initState();
   }
 

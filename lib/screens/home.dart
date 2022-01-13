@@ -42,6 +42,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Place? pickup;
   Place? dropoff;
   bool _showNextButton = false;
+  // distance between origin and destination
+  double? _distance;
   // Object for PolylinePoints
   late PolylinePoints polylinePoints;
 
@@ -113,7 +115,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         placeService
             .getPlaceDetailFromId(result.placeId)
             .then((_res) => _res.fold((_place) {
-                  print(_place);
                   if (selected == "pickup") {
                     pickup = _place;
                   } else {
@@ -151,7 +152,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       // camera view of the map
                       polylines.clear();
                       _createPolylines(dropoff!.latLng!, pickup!.latLng!);
-
                       _controller.animateCamera(
                         CameraUpdate.newLatLngBounds(
                           latLngBounds(pickup!.latLng!, dropoff!.latLng!),
@@ -173,16 +173,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 }, (r) => null));
       }
       if (_pickupController.text.isNotEmpty &&
-          _dropoffController.text.isNotEmpty) {
-        setState(() {
-          _showNextButton = true;
-        });
-        showBottomSheet(
-            context: context,
-            builder: (context) {
-              return bottomSheet();
-            });
-      }
+          _dropoffController.text.isNotEmpty) {}
     }
 
     return Scaffold(
@@ -209,7 +200,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 automaticallyImplyLeading: true,
                 leading: IconButton(
                   onPressed: toggleDrawer,
-                  icon: Icon(Icons.menu),
+                  icon: Icon(
+                    Icons.menu,
+                    color: ColorTheme.dark[1],
+                    size: 32,
+                  ),
                 ),
               ),
             ),
@@ -361,7 +356,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             Shipment _shipment = Shipment(
               origin: pickup,
               destination: dropoff,
-              vehicle: _selectedCarriage?.id,
+              vehicle: _selectedCarriage!.id,
+              distance: _distance,
+              price_: _selectedCarriage!.chargeRate * _distance!,
             );
             //close bottomsheet
             Navigator.of(context).pop();
@@ -386,16 +383,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         width: 50,
         child: Icon(carriage.icon),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(25),
+          ),
           border: Border.all(
               color: selected ? ColorTheme.primaryColor : ColorTheme.dark[3],
               width: 2),
         ),
       ),
-      trailing: Text("Ksh 700"),
+      trailing: Text(
+        "Ksh ${_distance != null ? (carriage.chargeRate * _distance!).toStringAsFixed(2) : "None"}",
+      ),
     );
   }
-  
+
   // Create the polylines for showing the route between two places
 
   _createPolylines(LatLng p1, LatLng p2) {
@@ -420,6 +421,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             PointLatLng point = result.points[i];
             polylineCoordinates.add(LatLng(point.latitude, point.longitude));
           }
+          //calculate the using polyline coordinates distance
+          _distance = calucateTotalDistance(polylineCoordinates);
+        } else {
+          //calculate the btwn pickup and dropoff coordinates
+          _distance = coordinateDistance(
+              pickup!.latLng!.latitude,
+              pickup!.latLng!.longitude,
+              dropoff!.latLng!.latitude,
+              dropoff!.latLng!.longitude);
         }
         // Defining an ID
         PolylineId id = PolylineId(randomString(10));
@@ -432,9 +442,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         );
 
         // Adding the polyline to the map
-
         polylines.add(polyline);
         setState(() {});
+        _showNextButton = true;
+        //
+        showBottomSheet(
+            context: context,
+            builder: (_) {
+              return bottomSheet();
+            });
       },
     );
   }

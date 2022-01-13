@@ -1,4 +1,5 @@
 import 'package:courier_services/models/shipment.dart';
+import 'package:courier_services/screens/rating.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/widgets/ratingBar/ratingBar.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,13 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => RatingScreen(),
+        ),
+      ),
+      child: Card(
         margin: EdgeInsets.symmetric(vertical: 10),
         elevation: 5,
         shadowColor: Colors.grey.shade300,
@@ -17,7 +24,7 @@ class HistoryCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           width: MediaQuery.of(context).size.width,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Column(
@@ -76,15 +83,22 @@ class HistoryCard extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  ratingBar(rating: 5, size: 15),
+                  this.shipment.rating != null
+                      ? ratingBar(rating: this.shipment.rating!, size: 15)
+                      : Text(
+                          "not yet rated",
+                          style: TextStyle(fontSize: 15),
+                        ),
                   SizedBox(
                     height: 12,
                   ),
-                  Text("${this.shipment.price}")
+                  Text("Ksh ${this.shipment.price}",style: TextStyle(fontWeight: FontWeight.bold),)
                 ],
               )
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

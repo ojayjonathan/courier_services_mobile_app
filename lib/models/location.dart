@@ -49,8 +49,10 @@ class Place {
   }
 
   factory Place.fromJson(Map<String, dynamic> json) {
-    LatLng latLng =
-        LatLng(double.parse(json["lat"]), double.parse(json["lng"]));
+    LatLng latLng = LatLng(
+      json["lat"] ?? 0.0,
+      json["lng"] ?? 0.0,
+    );
     return Place(
       latLng: latLng,
       name: json["name"],

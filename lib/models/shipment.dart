@@ -8,9 +8,16 @@ class Shipment {
   Place? origin;
   Place? destination;
   int? vehicle;
-  double? price;
+  double? price_;
   String? status_;
   String? shipmentDate;
+  double? rating;
+  double? distance;
+  double? get price => price_ != null
+      ? double.parse(
+          price_!.toStringAsFixed(2),
+        )
+      : null;
   String get status {
     return {
           "A": "Active",
@@ -27,9 +34,11 @@ class Shipment {
       this.origin,
       this.destination,
       this.vehicle,
-      this.price,
+      this.price_,
       this.status_,
-      this.shipmentDate});
+      this.shipmentDate,
+      this.rating,
+      this.distance});
 
   factory Shipment.fromJson(Map<String, dynamic> json) {
     return Shipment(
@@ -38,9 +47,11 @@ class Shipment {
         origin: Place.fromJson(json['origin']),
         destination: Place.fromJson(json['destination']),
         vehicle: json['vehicle'],
-        price: double.parse(json['price'].toString()),
+        price_: double.parse("${json['price']}"),
         status_: json['status'],
-        shipmentDate: json['shipment_date']);
+        shipmentDate: json['date'],
+        rating: json["rating"],
+        distance: json["distance"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -49,9 +60,10 @@ class Shipment {
       'vehicle': this.vehicle,
       'price': this.price ?? 0.0,
       'status': this.status_ ?? "P",
-      'shipment_date': this.shipmentDate,
+      'date': this.shipmentDate,
       "origin": this.origin?.toJson(),
       "destination": this.destination?.toJson(),
+      "distance": this.distance,
     };
   }
 

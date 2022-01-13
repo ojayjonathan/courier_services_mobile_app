@@ -15,6 +15,7 @@ class ShipmentApiProvider {
   );
   Future<Either<Shipment, ErrorMessage>> create(
       Map<String, dynamic> data) async {
+    print(data);
     try {
       final response = await dio.post(
         "${URL}shipments/",
@@ -26,6 +27,8 @@ class ShipmentApiProvider {
       );
       return Left(Shipment.fromJson(response.data["shipment"]));
     } catch (e) {
+      print(e);
+
       return Right(getException(e));
     }
   }
@@ -44,8 +47,51 @@ class ShipmentApiProvider {
         data.map((json) => Shipment.fromJson(json["shipment"])),
       );
     } catch (e) {
-      print(e);
       throw getException(e);
+    }
+  }
+
+  Future<Either<Shipment, ErrorMessage>> cancelShipment(int id) async {
+    try {
+      final response = await dio.patch(
+        "${URL}shipments/",
+        options: Options(
+          headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
+          sendTimeout: timeout,
+        ),
+        data: {"shipment_id": id},
+      );
+      return Left(
+        Shipment.fromJson(response.data["shipment"]),
+      );
+    } catch (e) {
+      return Right(
+        getException(e),
+      );
+    }
+  }
+
+  Future<Either<String, ErrorMessage>> rateDelivery(
+      int shipmentId, double rating) async {
+    try {
+      final response = await dio.put(
+        "${URL}feedback/",
+        options: Options(
+          headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
+          sendTimeout: timeout,
+        ),
+        data: {
+          "shipment_id": shipmentId,
+          "rating": rating,
+        },
+      );
+      return Left(
+        response.data["message"],
+      );
+    } catch (e) {
+      return Right(
+        getException(e),
+      );
     }
   }
 

@@ -11,16 +11,16 @@ class Carriage {
   String carrierType;
   String carrierCapacity;
   String vehicleRegistrationNumber;
+  double chargeRate;
 
-  String? model;
-
-  Carriage(
-      {required this.id,
-      required this.driver,
-      required this.carrierType,
-      required this.carrierCapacity,
-      required this.vehicleRegistrationNumber,
-      this.model});
+  Carriage({
+    required this.id,
+    required this.driver,
+    required this.carrierType,
+    required this.carrierCapacity,
+    required this.vehicleRegistrationNumber,
+    required this.chargeRate,
+  });
   IconData get icon {
     return {
           "B": Icons.two_wheeler,
@@ -32,12 +32,12 @@ class Carriage {
 
   factory Carriage.fromJson(Map<String, dynamic> json) {
     return Carriage(
-      id: json['id'],
-      driver: Driver.fromJson(json['driver']),
-      carrierType: json['carrier_type'],
-      carrierCapacity: json['carrier_capacity'],
-      vehicleRegistrationNumber: json['vehicle_registration_number'],
-    );
+        id: json['id'],
+        driver: Driver.fromJson(json['driver']),
+        carrierType: json['carrier_type'],
+        carrierCapacity: json['carrier_capacity'],
+        vehicleRegistrationNumber: json['vehicle_registration_number'],
+        chargeRate: json["charge_rate"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -47,7 +47,7 @@ class Carriage {
       'carrier_type': this.carrierType,
       'carrier_capacity': this.carrierCapacity,
       'vehicle_registration_number': this.vehicleRegistrationNumber,
-      'model': this.model,
+      'charge_rate': this.chargeRate,
     };
   }
 
