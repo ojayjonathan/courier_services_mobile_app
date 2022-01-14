@@ -72,7 +72,7 @@ class ShipmentApiProvider {
   }
 
   Future<Either<String, ErrorMessage>> rateDelivery(
-      int shipmentId, double rating) async {
+      int shipmentId, double rating, String? message) async {
     try {
       final response = await dio.put(
         "${URL}feedback/",
@@ -83,6 +83,7 @@ class ShipmentApiProvider {
         data: {
           "shipment_id": shipmentId,
           "rating": rating,
+          "message": message,
         },
       );
       return Left(

@@ -13,7 +13,9 @@ class HistoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => RatingScreen(),
+          builder: (_) => RatingScreen(
+            shipment: this.shipment,
+          ),
         ),
       ),
       child: Card(
@@ -92,7 +94,10 @@ class HistoryCard extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  Text("Ksh ${this.shipment.price}",style: TextStyle(fontWeight: FontWeight.bold),)
+                  Text(
+                    "Ksh ${this.shipment.price}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
                 ],
               )
             ],

@@ -47,12 +47,7 @@ class AppDrawer extends StatelessWidget {
               title: Text('Home'),
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.home),
             ),
-            ListTile(
-              leading: Icon(Icons.feedback,
-                  color: ColorTheme.primaryColor),
-              title: Text('Feedback'),
-              onTap: () => Navigator.of(context).pushNamed(AppRoutes.feedback),
-            ),
+           
             ListTile(
               leading: Icon(Icons.phone,
                   color: ColorTheme.primaryColor),

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.splash,
 
       routes: {
-        AppRoutes.rating: (_) => RatingScreen(),
+        
         AppRoutes.shipmentHistory: (_) => RideHistory(),
         AppRoutes.signin: (_) => SignIn(),
         AppRoutes.signup: (_) => SignUp(),
