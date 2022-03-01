@@ -38,7 +38,7 @@ class Auth {
 
   static Future<Either<User, ErrorMessage>> registerUser(Map data) async {
     try {
-      final response = await dio.post("${URL}auth/register/",
+      final response = await dio.post("${URL}auth/register",
           data: data, options: Options(sendTimeout: timeout));
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       _prefs.setString("authToken", response.data['token']);
@@ -52,15 +52,14 @@ class Auth {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
       String? authToken = _prefs.getString("authToken");
-      var _profile = await dio.put("${URL}api/customer/profile/",
+      var _profile = await dio.put("${URL}client/profile",
           options: Options(
             headers: {'Authorization': 'Token $authToken'},
             sendTimeout: timeout,
           ),
           data: jsonEncode(data));
-      print(_profile.data);
       _prefs.setString("user", jsonEncode(_profile.data));
-      return Left(User.fromJson(_profile.data as Map<String, dynamic>));
+      return Left(User.fromJson(_profile.data["user"]));
     } catch (e) {
       return Right(getException(e));
     }
@@ -69,8 +68,7 @@ class Auth {
   static Future<Either<Map<String, dynamic>, ErrorMessage>> resetPassword(
       {required Map<String, dynamic> data}) async {
     try {
-      final res =
-          await dio.post("${URL}api/auth/reset/", data: jsonEncode(data));
+      final res = await dio.post("${URL}auth/reset/", data: jsonEncode(data));
       return Left(res.data as Map<String, dynamic>);
     } catch (e) {
       return Right(
@@ -82,26 +80,9 @@ class Auth {
   static Future<Either<Map<String, dynamic>, ErrorMessage>> setNewPassword(
       {required Map<String, dynamic> data}) async {
     try {
-      final res = await dio.put("${URL}api/auth/reset/",
+      final res = await dio.put("${URL}auth/reset/",
           data: data, options: Options(sendTimeout: timeout));
       return Left(res.data as Map<String, dynamic>);
-    } catch (e) {
-      return Right(
-        getException(e),
-      );
-    }
-  }
-
-  static Future<Either<User, ErrorMessage>> refreshUserProfile() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    try {
-      String? authToken = _prefs.getString("authToken");
-      var profile = await dio.get("${URL}profile/",
-          options: Options(
-              headers: {'Authorization': 'Token $authToken'},
-              sendTimeout: timeout));
-      _prefs.setString("user", jsonEncode(profile.data));
-      return Left(User.fromJson(profile.data));
     } catch (e) {
       return Right(
         getException(e),
@@ -117,12 +98,12 @@ class Auth {
     } else {
       try {
         String? authToken = _prefs.getString("authToken");
-        var profile = await dio.get("${URL}profile/",
+        var profile = await dio.get("${URL}client/profile",
             options: Options(
                 headers: {'Authorization': 'Token $authToken'},
                 sendTimeout: timeout));
-        _prefs.setString("user", jsonEncode(profile.data));
-        return Left(User.fromJson(profile.data));
+        _prefs.setString("user", jsonEncode(profile.data["user"]));
+        return Left(User.fromJson(profile.data["user"]));
       } catch (e) {
         return Right(getException(e));
       }

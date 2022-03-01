@@ -38,7 +38,7 @@ class MapScreenState extends State<AccountPage>
   }
 
   Future<void> _refresh() async {
-    final _res = await Auth.refreshUserProfile();
+    final _res = await Auth.getUserProfile();
     _res.fold(
         (_user) => setState(() {
               user = _user;

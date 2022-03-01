@@ -28,7 +28,8 @@ class SignUp extends StatelessWidget {
             "email": _emailController.text,
             "phone_number": "+254" + _phoneController.text.substring(1),
             "username": _usernameController.text,
-            "password": _passwordController.text
+            "password": _passwordController.text,
+            "is_driver": false
           },
         );
         res.fold((l) {

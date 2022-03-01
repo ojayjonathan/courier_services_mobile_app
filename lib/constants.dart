@@ -14,5 +14,6 @@ class AppRoutes {
   static const packageDetail = "/packageDetails";
 }
 
-const URL = "https://courier-ke.herokuapp.com/";
+// const URL = "https://courier-ke.herokuapp.com/";
+const URL = "http://192.168.43.232:8000/";
 int timeout = 100000;

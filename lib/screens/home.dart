@@ -56,16 +56,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _shipmentApiProvider.carriageList().then(
-          (res) => res.fold((carriage) => {_carriage = carriage}, (r) => {}),
+          (res) => res.fold((carriage) {
+            _carriage = carriage;
+            print(_carriage);
+            setState(() {
+              
+            });
+          }, (r) => {print(r)}),
         );
   }
 
   toggleDrawer() {
     if (_scaffoldKey.currentState!.isEndDrawerOpen) {
-      _scaffoldKey.currentState!.openEndDrawer();
+      _scaffoldKey.currentState?.openEndDrawer();
     } else {
-      _scaffoldKey.currentState!.openDrawer();
+      _scaffoldKey.currentState?.openDrawer();
     }
   }
 
