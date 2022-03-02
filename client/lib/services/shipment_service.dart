@@ -74,7 +74,7 @@ class ShipmentApiProvider {
   Future<Either<String, ErrorMessage>> rateDelivery(
       int shipmentId, double rating, String? message) async {
     try {
-      final response = await dio.put(
+      final response = await dio.post(
         "${URL}feedback/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},

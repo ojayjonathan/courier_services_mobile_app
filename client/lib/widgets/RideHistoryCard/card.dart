@@ -1,7 +1,8 @@
 import 'package:courier_services/models/shipment.dart';
-import 'package:courier_services/screens/rating.dart';
+import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 
 class HistoryCard extends StatelessWidget {
   final Shipment shipment;
@@ -9,14 +10,54 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => RatingScreen(
-            shipment: this.shipment,
+    final ShipmentApiProvider _service = ShipmentApiProvider();
+    Widget _ratingDialog() {
+      return RatingDialog(
+        initialRating: 3.0,
+        // your app's name?
+        title: Text(
+          'Rate Our Delivery Service',
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        // encourage your user to leave a high rating?
+        message: Text(
+          'Tap a star to set your rating.',
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 15),
+        ),
+
+        submitButtonText: 'Submit',
+        onSubmitted: (response) {
+          _service
+              .rateDelivery(
+                this.shipment.id!,
+                response.rating,
+                response.comment,
+              )
+              .then(
+                (res) => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Thank you for your feedback",
+                      style: TextStyle(color: ColorTheme.successColor),
+                    ),
+                  ),
+                ),
+              );
+        },
+        commentHint: "Type your comment here",
+      );
+    }
+
+    return GestureDetector(
+     
+      onTap: () => showDialog(
+          context: context,
+          builder: (_) => _ratingDialog(),
+          barrierDismissible: true),
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 10),
         elevation: 5,
