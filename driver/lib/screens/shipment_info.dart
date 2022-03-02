@@ -185,7 +185,8 @@ class ShipmentInfo extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
+                    Container(
+                      width: double.infinity,
                       padding: EdgeInsets.all(8),
                       child: RichText(
                         text: TextSpan(children: [
@@ -219,10 +220,21 @@ class ShipmentInfo extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: DefaultButton(
-                        handlePress: _acceptShipment,
-                        text: "Accept Request",
-                      ),
+                      child: shipment.shipment.status == "Pending"
+                          ? DefaultButton(
+                              handlePress: _acceptShipment,
+                              text: "Accept Request",
+                            )
+                          : Text(
+                              shipment.shipment.status,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: shipment.shipment.status == "Active"
+                                      ? Colors.amber
+                                      : shipment.shipment.status == "Fulfilled"
+                                          ? ColorTheme.successColor
+                                          : Colors.red),
+                            ),
                     )
                   ],
                 ),

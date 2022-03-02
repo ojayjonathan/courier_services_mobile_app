@@ -85,12 +85,11 @@ class DriverShipmentProvider {
       );
       return Left(CustomerShipment.fromJson(response.data));
     } catch (e) {
-      print(e);
       return Right(getException(e));
     }
   }
 
-  Future<Either<List<Carriage>, ErrorMessage>> carriageList() async {
+  Future<List<Carriage>> carriageList() async {
     try {
       final response = await dio.get(
         "${URL}driver/vehicle",
@@ -100,11 +99,25 @@ class DriverShipmentProvider {
         ),
       );
       Iterable data = response.data;
-      return Left(
-        List<Carriage>.from(
-          data.map((json) => Carriage.fromJson(json)),
-        ),
+      return List<Carriage>.from(
+        data.map((json) => Carriage.fromJson(json)),
       );
+    } catch (e) {
+      throw getException(e);
+    }
+  }
+
+  Future<Either<Carriage, ErrorMessage>> createcarriage(Map data) async {
+    try {
+      final res = await dio.post(
+        "${URL}driver/vehicle",
+        options: Options(
+          headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
+          sendTimeout: timeout,
+        ),
+        data: data,
+      );
+      return Left(Carriage.fromJson(res.data));
     } catch (e) {
       return Right(getException(e));
     }
