@@ -49,7 +49,6 @@ class ConfirmShipment extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,8 +155,10 @@ class ConfirmShipment extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                              text: "${this.shipment.price}",
-                              style: TextStyle(color: ColorTheme.primaryColor)),
+                              text: "Ksh ${this.shipment.price}",
+                              style: TextStyle(
+                                  color: ColorTheme.primaryColor,
+                                  fontWeight: FontWeight.bold)),
                           TextSpan(
                             text: "\t\t Pending",
                             style: TextStyle(color: Colors.red),
@@ -171,7 +172,9 @@ class ConfirmShipment extends StatelessWidget {
                         text: TextSpan(children: [
                           TextSpan(
                             text: "Packages :",
-                            style: TextStyle(color: ColorTheme.dark[2]),
+                            style: TextStyle(
+                                color: ColorTheme.dark[2],
+                                fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
                               text: "\t\t 1",

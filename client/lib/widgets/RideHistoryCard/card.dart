@@ -1,7 +1,6 @@
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/screens/rating.dart';
 import 'package:courier_services/theme.dart';
-import 'package:courier_services/widgets/ratingBar/ratingBar.dart';
 import 'package:flutter/material.dart';
 
 class HistoryCard extends StatelessWidget {
@@ -85,12 +84,16 @@ class HistoryCard extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  this.shipment.rating != null
-                      ? ratingBar(rating: this.shipment.rating!, size: 15)
-                      : Text(
-                          "not yet rated",
-                          style: TextStyle(fontSize: 15),
-                        ),
+                  Text(
+                    this.shipment.status,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: shipment.status == "Active"
+                            ? Colors.amber
+                            : shipment.status == "Fulfilled"
+                                ? ColorTheme.successColor
+                                : Colors.red),
+                  ),
                   SizedBox(
                     height: 12,
                   ),

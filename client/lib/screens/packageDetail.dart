@@ -1,4 +1,3 @@
-import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/screens/confirmshipment.dart';
 import 'package:courier_services/theme.dart';

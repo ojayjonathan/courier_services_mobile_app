@@ -14,7 +14,7 @@ class RideHistory extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text('Ride History'),
+        title: Text('Shipment History'),
         actions: [
           IconButton(
             onPressed: () {},
@@ -30,7 +30,7 @@ class RideHistory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Showing Recent Rides',
+                'Showing Recent Shipments',
                 style: TextStyle(
                     color: ColorTheme.primaryColor,
                     fontSize: 18,

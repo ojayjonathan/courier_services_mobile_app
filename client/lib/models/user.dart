@@ -30,7 +30,9 @@ class User {
 
   @override
   String toString() {
-    return jsonEncode(this.toJson(),);
+    return jsonEncode(
+      this.toJson(),
+    );
   }
 }
 

@@ -53,19 +53,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 // Map storing polylines created by connecting two points
   List<Polyline> polylines = [];
 
+  getCarriage() {
+    _shipmentApiProvider.carriageList().then(
+          (res) => res.fold(
+            (carriage) {
+              _carriage = carriage;
+              setState(() {});
+            },
+            (r) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  r.message,
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+  }
+
   @override
   void initState() {
     super.initState();
-
-    _shipmentApiProvider.carriageList().then(
-          (res) => res.fold((carriage) {
-            _carriage = carriage;
-            print(_carriage);
-            setState(() {
-              
-            });
-          }, (r) => {print(r)}),
-        );
+    getCarriage();
   }
 
   toggleDrawer() {
@@ -274,6 +286,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget bottomSheet() {
+    getCarriage();
     return StatefulBuilder(builder: (context, bState) {
       return Container(
         constraints: BoxConstraints(
