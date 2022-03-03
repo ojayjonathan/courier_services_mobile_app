@@ -101,8 +101,17 @@ class SignIn extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('forgot password',
-                              style: TextStyle(color: Colors.grey)),
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).pushNamed(
+                              AppRoutes.resetpassword,
+                            ),
+                            child: Text(
+                              'forgot password',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
