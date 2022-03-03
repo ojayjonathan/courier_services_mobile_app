@@ -44,6 +44,8 @@ class RideHistory extends StatelessWidget {
                     if (snapshot.hasData) {
                       List<CustomerShipment> shipments =
                           snapshot.data as List<CustomerShipment>;
+                      if (shipments.isEmpty)
+                        return Text("You have not made any shipment");
                       return ListView.builder(
                           itemBuilder: (_, index) =>
                               HistoryCard(shipment: shipments[index]),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:courier_services/conf.dart';
+import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/carriage.dart';
 import 'package:courier_services/models/location.dart';
 import 'package:courier_services/models/shipment.dart';
@@ -212,7 +213,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 centerTitle: true,
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(AppRoutes.notifications);
+                    },
                     icon: Icon(Icons.notifications),
                   )
                 ],

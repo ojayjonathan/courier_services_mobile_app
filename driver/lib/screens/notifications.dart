@@ -1,12 +1,10 @@
 import 'package:courier_services/models/shipment.dart';
-import 'package:courier_services/services/shipment_service.dart';
+import 'package:courier_services/services/auth.dart';
 import 'package:courier_services/theme.dart';
-import 'package:courier_services/widgets/RideHistoryCard/card.dart';
 import 'package:flutter/material.dart';
 
-class RideHistory extends StatelessWidget {
-  RideHistory({Key? key}) : super(key: key);
-  final _apiProvider = ShipmentApiProvider();
+class NotificationScreen extends StatelessWidget {
+  NotificationScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +12,7 @@ class RideHistory extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text('Shipment History'),
+        title: Text('Notification'),
         actions: [
           IconButton(
             onPressed: () {},
@@ -30,7 +28,7 @@ class RideHistory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Showing Recent Shipments',
+                'Notifications',
                 style: TextStyle(
                     color: ColorTheme.primaryColor,
                     fontSize: 18,
@@ -39,17 +37,17 @@ class RideHistory extends StatelessWidget {
               Container(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: FutureBuilder(
-                  future: _apiProvider.customerShipments(),
+                  future: Auth.notification(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
-                      List<Shipment> shipments =
-                          snapshot.data as List<Shipment>;
-                      if (shipments.isEmpty)
-                        return Text("You have not made any shipment");
+                      List<UserNotification> notifications =
+                          snapshot.data as List<UserNotification>;
+                      if (notifications.isEmpty)
+                        return Text("There is noting here ");
                       return ListView.builder(
                           itemBuilder: (_, index) =>
-                              HistoryCard(shipment: shipments[index]),
-                          itemCount: shipments.length);
+                              _notificationCard(context, notifications[index]),
+                          itemCount: notifications.length);
                     }
                     return snapshot.hasError
                         ? Text(snapshot.error.toString())
@@ -65,6 +63,37 @@ class RideHistory extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _notificationCard(BuildContext context, UserNotification n) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      elevation: 5,
+      shadowColor: Colors.grey.shade300,
+      child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      n.date,
+                      style: TextStyle(
+                          color: ColorTheme.dark[1],
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Text(n.message)
+            ],
+          )),
     );
   }
 }

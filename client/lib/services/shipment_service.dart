@@ -18,7 +18,7 @@ class ShipmentApiProvider {
     print(data);
     try {
       final response = await dio.post(
-        "${URL}shipment/client",
+        "${URL}shipment/client/",
         data: data,
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
@@ -36,7 +36,7 @@ class ShipmentApiProvider {
   Future<List<Shipment>> customerShipments() async {
     try {
       final response = await dio.get(
-        "${URL}shipment/client",
+        "${URL}shipment/client/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
           sendTimeout: timeout,
@@ -54,7 +54,7 @@ class ShipmentApiProvider {
   Future<Either<Shipment, ErrorMessage>> cancelShipment(int id) async {
     try {
       final response = await dio.patch(
-        "${URL}shipment/client",
+        "${URL}shipment/client/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
           sendTimeout: timeout,
@@ -99,7 +99,7 @@ class ShipmentApiProvider {
   Future<Either<List<Carriage>, ErrorMessage>> carriageList() async {
     try {
       final response = await dio.get(
-        "${URL}client/vehicle",
+        "${URL}client/vehicle/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
           sendTimeout: timeout,

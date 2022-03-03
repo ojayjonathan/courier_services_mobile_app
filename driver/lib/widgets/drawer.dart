@@ -82,6 +82,13 @@ class AppDrawer extends StatelessWidget {
                   Navigator.of(context).pushNamed(AppRoutes.shipmentHistory),
             ),
             ListTile(
+              leading:
+                  Icon(Icons.notifications, color: ColorTheme.primaryColor),
+              title: Text('Notifications'),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.notifications),
+            ),
+            ListTile(
               leading: Icon(Icons.logout, color: ColorTheme.primaryColor),
               title: Text('Logout'),
               onTap: () async {

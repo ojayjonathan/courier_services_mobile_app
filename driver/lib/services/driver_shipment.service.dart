@@ -44,12 +44,10 @@ class DriverShipmentProvider {
         ),
       );
       Iterable data = response.data;
-      print(data);
       return Left(List<CustomerShipment>.from(
         data.map((json) => CustomerShipment.fromJson(json)),
       ));
     } catch (e) {
-      print(e);
       return Right(getException(e));
     }
   }
@@ -58,7 +56,7 @@ class DriverShipmentProvider {
       int shipmentId) async {
     try {
       final response = await dio.put(
-        "${URL}shipment/driver",
+        "${URL}shipment/driver/",
         data: {"shipment_id": shipmentId},
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
@@ -76,7 +74,7 @@ class DriverShipmentProvider {
       int shipmentId) async {
     try {
       final response = await dio.patch(
-        "${URL}shipment/driver",
+        "${URL}shipment/driver/",
         data: {"shipment_id": shipmentId},
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
@@ -92,7 +90,7 @@ class DriverShipmentProvider {
   Future<List<Carriage>> carriageList() async {
     try {
       final response = await dio.get(
-        "${URL}driver/vehicle",
+        "${URL}driver/vehicle/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
           sendTimeout: timeout,
@@ -110,7 +108,7 @@ class DriverShipmentProvider {
   Future<Either<Carriage, ErrorMessage>> createcarriage(Map data) async {
     try {
       final res = await dio.post(
-        "${URL}driver/vehicle",
+        "${URL}driver/vehicle/",
         options: Options(
           headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
           sendTimeout: timeout,

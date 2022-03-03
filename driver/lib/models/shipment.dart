@@ -127,3 +127,12 @@ class CustomerShipment {
         shipment: Shipment.fromJson(json["shipment"]));
   }
 }
+
+class UserNotification {
+  String message;
+  String date;
+ UserNotification(this.message, this.date);
+  factory UserNotification.fromJson(Map json) {
+    return UserNotification(json["message"], json["date"]);
+  }
+}

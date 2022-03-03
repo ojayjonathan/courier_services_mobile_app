@@ -4,6 +4,8 @@ import 'package:courier_services/screens/Vehicles.dart';
 import 'package:courier_services/screens/home.dart';
 
 import 'package:courier_services/screens/intro.dart';
+import 'package:courier_services/screens/notifications.dart';
+import 'package:courier_services/screens/resetPassword.dart';
 import 'package:courier_services/screens/rideHistory.dart';
 import 'package:courier_services/screens/splash.dart';
 import 'package:courier_services/screens/support.dart';
@@ -45,7 +47,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.profile: (_) => AccountPage(),
         AppRoutes.support: (_) => ContactUs(),
         AppRoutes.vehicle: (_) => VehicleScreen(),
-
+        AppRoutes.notifications: (_) => NotificationScreen(),
+        AppRoutes.resetpassword: (_) => ResetPasswordPage(),
       },
     );
   }

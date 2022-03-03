@@ -12,8 +12,10 @@ class AppRoutes {
   static const splash = "/splash";
   static const confirmShipment = "/confirm-shipment";
   static const packageDetail = "/packageDetails";
+  static const notifications = "/notification";
+  static const resetpassword = "/password-reset";
 }
 
-// const URL = "https://courier-ke.herokuapp.com/";
-const URL = "http://192.168.43.232:8000/";
+const URL = "https://courier-ke.herokuapp.com/";
+// const URL = "http://192.168.43.232:8000/";
 int timeout = 100000;

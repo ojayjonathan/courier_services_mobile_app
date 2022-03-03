@@ -38,6 +38,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               carriage = snapshot.data as List<Carriage>;
+              if (carriage.isEmpty) return Text("There is nothing here");
               return ListView.builder(
                   itemBuilder: (_, index) => _carriageCard(carriage[index]),
                   itemCount: carriage.length);

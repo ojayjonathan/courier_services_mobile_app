@@ -1,14 +1,13 @@
 import 'package:courier_services/constants.dart';
-import 'package:courier_services/screens/confirmshipment.dart';
 import 'package:courier_services/screens/intro.dart';
-import 'package:courier_services/screens/packageDetail.dart';
+import 'package:courier_services/screens/notifications.dart';
+import 'package:courier_services/screens/resetPassword.dart';
 import 'package:courier_services/screens/splash.dart';
 import 'package:courier_services/screens/support.dart';
 import 'package:courier_services/screens/userAccount/UserAccount.dart';
 import 'package:courier_services/screens/welcomePage.dart';
 import 'package:flutter/material.dart';
 
-import './screens/rating.dart';
 import './screens/rideHistory.dart';
 import './screens/signin.dart';
 import './screens/Signup.dart';
@@ -33,9 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: AppRoutes.splash,
-
       routes: {
-        
         AppRoutes.shipmentHistory: (_) => RideHistory(),
         AppRoutes.signin: (_) => SignIn(),
         AppRoutes.signup: (_) => SignUp(),
@@ -47,9 +44,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.welcome: (_) => WelcomePage(),
         AppRoutes.profile: (_) => AccountPage(),
         AppRoutes.support: (_) => ContactUs(),
-       
+        AppRoutes.notifications: (_) => NotificationScreen(),
+        AppRoutes.resetpassword: (_) => ResetPasswordPage(),
       },
     );
   }
 }
-

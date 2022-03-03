@@ -1,11 +1,13 @@
 import 'dart:io';
 
-import 'package:courier_services/conf.dart';
-import 'package:courier_services/models/location.dart';
-import 'package:courier_services/services/exception.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../conf.dart';
+import '../models/location.dart';
+import 'exception.dart';
 
 class PlaceApiProvider {
   final client = Dio();
