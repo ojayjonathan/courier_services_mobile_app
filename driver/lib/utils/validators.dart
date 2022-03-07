@@ -8,15 +8,12 @@ String? requiredValidator(String? value) {
 }
 
 String? phoneValidator(String? value) {
+  RegExp re = new RegExp(r"0(1|7)\d{8}");
   if (value == null) {
     return "Required";
   }
-  if (value.isEmpty) {
-    return "Required";
-  } else if (value.length != 10) {
-    return "Please provide valid phone number eg 0712234576";
-  } else {
-    return null;
+  if (!re.hasMatch(value)) {
+    return "Please provide valid phone number eg 0712234576 or 0112234576";
   }
 }
 

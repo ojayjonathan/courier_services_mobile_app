@@ -1,3 +1,4 @@
+import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/carriage.dart';
 import 'package:courier_services/services/driver_shipment.service.dart';
 import 'package:courier_services/theme.dart';
@@ -187,29 +188,34 @@ class _VehicleScreenState extends State<VehicleScreen> {
                           _vehicleRegistartionNumber.text,
                       "carrier_capacity": "M",
                     };
-                    _apiProvider.createcarriage(data).then((value) =>
-                        value.fold(
-                          (c) {
-                            carriage.add(c);
-                            setState(() {});
-                            ScaffoldMessenger.of(context).showSnackBar(
+                    _apiProvider.createcarriage(data).then(
+                          (value) => value.fold(
+                            (c) {
+                              carriage.add(c);
+                              setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Vehicle Created",
+                                    style: TextStyle(
+                                        color: ColorTheme.successColor),
+                                  ),
+                                ),
+                              );
+                            },
+                            (r) => ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "Vehicle Created",
-                                  style:
-                                      TextStyle(color: ColorTheme.successColor),
+                                  r.message,
+                                  style: TextStyle(
+                                    color: Theme.of(context).errorColor,
+                                  ),
                                 ),
+                                duration: SNACKBARDURATION,
                               ),
-                            );
-                          },
-                          (r) => ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(
-                                  content: Text(
-                            r.message,
-                            style:
-                                TextStyle(color: Theme.of(context).errorColor),
-                          ))),
-                        ));
+                            ),
+                          ),
+                        );
                   }
                 },
                 text: "Submit")

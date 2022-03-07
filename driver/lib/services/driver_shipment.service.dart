@@ -28,7 +28,6 @@ class DriverShipmentProvider {
         data.map((json) => CustomerShipment.fromJson(json)),
       );
     } catch (e) {
-      print(e);
       throw (getException(e));
     }
   }
@@ -65,7 +64,6 @@ class DriverShipmentProvider {
       );
       return Left(CustomerShipment.fromJson(response.data));
     } catch (e) {
-      print(e);
       return Right(getException(e));
     }
   }

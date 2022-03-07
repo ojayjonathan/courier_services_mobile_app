@@ -52,15 +52,15 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Make a booking",
-          body: "Booking made easier with a click of a button .",
+          title: "Add a vehicle",
+          body: "Upload your vehicle information",
           image: _buldImage("intro_p3_.png"),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Get notified",
           body:
-              " Track available services with our 24/7 updates through our socials.",
+              "Get notified when  a client request your services",
           image: _buldImage("intro_p3.png"),
           decoration: pageDecoration,
         ),

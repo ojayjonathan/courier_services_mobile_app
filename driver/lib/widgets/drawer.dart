@@ -48,8 +48,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.home),
             ),
             ListTile(
-              leading: Icon(Icons.car_rental_outlined,
-                  color: ColorTheme.primaryColor),
+              leading: Icon(Icons.local_taxi, color: ColorTheme.primaryColor),
               title: Text('Vehicles'),
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.vehicle),
             ),

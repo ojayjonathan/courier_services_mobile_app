@@ -129,7 +129,7 @@ class Auth {
         data.map((e) => UserNotification.fromJson(e)),
       );
     } catch (e) {
-      print(e);
+      (e);
       throw getException(e);
     }
   }

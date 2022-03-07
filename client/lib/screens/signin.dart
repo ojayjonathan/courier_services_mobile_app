@@ -40,6 +40,7 @@ class SignIn extends StatelessWidget {
                 error.message,
                 style: TextStyle(color: Theme.of(context).errorColor),
               ),
+              duration: SNACKBARDURATION,
             ),
           );
         });

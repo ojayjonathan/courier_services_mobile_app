@@ -15,7 +15,6 @@ class ShipmentApiProvider {
   );
   Future<Either<Shipment, ErrorMessage>> create(
       Map<String, dynamic> data) async {
-    print(data);
     try {
       final response = await dio.post(
         "${URL}shipment/client/",
@@ -27,7 +26,6 @@ class ShipmentApiProvider {
       );
       return Left(Shipment.fromJson(response.data["shipment"]));
     } catch (e) {
-      print(e);
 
       return Right(getException(e));
     }

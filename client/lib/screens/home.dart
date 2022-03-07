@@ -372,6 +372,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     "Please select carriage before you continue",
                     style: TextStyle(color: Theme.of(context).errorColor),
                   ),
+                  duration: SNACKBARDURATION
                 ),
               );
               return;

@@ -12,6 +12,8 @@ class SignUp extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _dlNumberController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,17 +31,21 @@ class SignUp extends StatelessWidget {
             "phone_number": "+254" + _phoneController.text.substring(1),
             "username": _usernameController.text,
             "password": _passwordController.text,
-            "is_driver": true
+            "is_driver": true,
+            "dl_number": _dlNumberController.text
           },
         );
         res.fold((l) {
           Navigator.of(context).popUntil((route) => route.isFirst);
           Navigator.of(context).pushNamed(AppRoutes.home);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
               content: Text(
-            "Account created successfuly",
-            style: TextStyle(color: ColorTheme.successColor),
-          )));
+                "Account created successfuly",
+                style: TextStyle(color: ColorTheme.successColor),
+              ),
+            ),
+          );
         }, (error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -47,6 +53,7 @@ class SignUp extends StatelessWidget {
                 error.message,
                 style: TextStyle(color: Theme.of(context).errorColor),
               ),
+              duration: SNACKBARDURATION,
             ),
           );
         });
@@ -54,106 +61,126 @@ class SignUp extends StatelessWidget {
     }
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: SingleChildScrollView(
-                child: Container(
-                    child: Column(children: [
-          Center(
-            heightFactor: 3,
-            child: Image.asset(
-              'assets/images/truck.png',
-              height: 50,
-              width: 195,
-            ),
-          ),
-          // SizedBox(
-          //   height: 20,
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text(
-              'Welcome Aboard!',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          Text(
-            'SignUp with Courier',
-            style: TextStyle(color: Colors.grey),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: DefaultInput(
-                        controller: _usernameController,
-                        hintText: 'User Name',
-                        validator: requiredValidator,
-                        icon: Icons.person_outline,
-                      )),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: DefaultInput(
-                        controller: _emailController,
-                        hintText: 'Email',
-                        validator: requiredValidator,
-                        icon: Icons.email_outlined,
-                      )),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: DefaultInput(
-                        controller: _phoneController,
-                        hintText: 'Phone number',
-                        validator: phoneValidator,
-                        icon: Icons.phone,
-                      )),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: PasswordField(
-                        _passwordController,
-                      )),
-                  SizedBox(
-                    height: 30,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Center(
+                  heightFactor: 3,
+                  child: Image.asset(
+                    'assets/images/truck.png',
+                    height: 50,
+                    width: 195,
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: DefaultButton(
-                      handlePress: register,
-                      text: 'Sign Up',
+                ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    'Welcome Aboard!',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Already a User ? ',
-                                style: TextStyle(color: Colors.grey)),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, AppRoutes.signin);
-                              },
-                              child: Text('Login now',
-                                  style: TextStyle(
-                                      color: ColorTheme.primaryColor,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ])),
-                ],
-              ),
+                ),
+                Text(
+                  'SignUp with Courier',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DefaultInput(
+                            controller: _usernameController,
+                            hintText: 'User Name',
+                            validator: requiredValidator,
+                            icon: Icons.person_outline,
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DefaultInput(
+                            controller: _emailController,
+                            hintText: 'Email',
+                            validator: requiredValidator,
+                            icon: Icons.email_outlined,
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DefaultInput(
+                            controller: _phoneController,
+                            hintText: 'Phone number',
+                            validator: phoneValidator,
+                            icon: Icons.phone,
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DefaultInput(
+                            controller: _dlNumberController,
+                            hintText: 'Driver licence number',
+                            validator: requiredValidator,
+                            icon: Icons.local_taxi,
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: PasswordField(
+                            _passwordController,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DefaultButton(
+                            handlePress: register,
+                            text: 'Sign Up',
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Already a User ? ',
+                                      style: TextStyle(color: Colors.grey)),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.signin);
+                                    },
+                                    child: Text('Login now',
+                                        style: TextStyle(
+                                            color: ColorTheme.primaryColor,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ])),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ])))));
+        ),
+      ),
+    );
   }
 }

@@ -41,7 +41,7 @@ class PlaceApiProvider {
       final url =
           'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=address_components,name,geometry&key=$apiKey&sessiontoken=$sessionToken';
       final response = await client.get(url);
-      print(response.data);
+      (response.data);
       final result = response.data;
       final components =
           result['result']['address_components'] as List<dynamic>;
@@ -66,7 +66,6 @@ class PlaceApiProvider {
       place.latLng = LatLng(lat, lng);
       return Left(place);
     } catch (e) {
-      print(e);
       return Right(getException(e));
     }
   }

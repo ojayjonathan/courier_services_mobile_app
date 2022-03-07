@@ -13,21 +13,51 @@ class ConfirmShipment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Please wait...",
+          style: TextStyle(
+            color: ColorTheme.successColor,
+          ),
+        ),
+        duration: SNACKBARDURATION,
+      ),
+    );
     void _confirmShipment() {
       //TODO: integrate payments
-      _service.create(shipment.toJson()).then((res) => res.fold((l) {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            Navigator.of(context).pushNamed(AppRoutes.shipmentHistory);
-          }, (r) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  r.message,
-                  style: TextStyle(color: Theme.of(context).errorColor),
-                ),
-              ),
-            );
-          }));
+      _service
+          .create(
+            shipment.toJson(),
+          )
+          .then(
+            (
+              res,
+            ) =>
+                res.fold(
+              (l) {
+                Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
+                );
+                Navigator.of(context).pushNamed(
+                  AppRoutes.shipmentHistory,
+                );
+              },
+              (r) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      r.message,
+                      style: TextStyle(
+                        color: Theme.of(context).errorColor,
+                      ),
+                    ),
+                    duration: SNACKBARDURATION,
+                  ),
+                );
+              },
+            ),
+          );
     }
 
     return Scaffold(

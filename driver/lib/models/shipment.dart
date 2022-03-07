@@ -119,7 +119,6 @@ class CustomerShipment {
       required this.orderNo});
 
   factory CustomerShipment.fromJson(Map json) {
-    print(json);
     return CustomerShipment(
         orderNo: json["order_number"],
         id: json["id"],

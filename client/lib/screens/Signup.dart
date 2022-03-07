@@ -35,11 +35,15 @@ class SignUp extends StatelessWidget {
         res.fold((l) {
           Navigator.of(context).popUntil((route) => route.isFirst);
           Navigator.of(context).pushNamed(AppRoutes.home);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
               content: Text(
-            "Account created successfuly",
-            style: TextStyle(color: ColorTheme.successColor),
-          )));
+                "Account created successfuly",
+                style: TextStyle(color: ColorTheme.successColor),
+              ),
+              duration: SNACKBARDURATION,
+            ),
+          );
         }, (error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -28,18 +28,26 @@ class SignIn extends StatelessWidget {
         res.fold((l) {
           Navigator.of(context).popUntil((route) => route.isFirst);
           Navigator.of(context).pushNamed(AppRoutes.home);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
               content: Text(
-            "Login successfuly",
-            style: TextStyle(color: ColorTheme.successColor),
-          )));
+                "Login successfuly",
+                style: TextStyle(
+                  color: ColorTheme.successColor,
+                ),
+              ),
+            ),
+          );
         }, (error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
                 error.message,
-                style: TextStyle(color: Theme.of(context).errorColor),
+                style: TextStyle(
+                  color: Theme.of(context).errorColor,
+                ),
               ),
+              duration: SNACKBARDURATION,
             ),
           );
         });

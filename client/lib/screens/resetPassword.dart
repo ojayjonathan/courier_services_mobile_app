@@ -1,3 +1,4 @@
+import 'package:courier_services/constants.dart';
 import 'package:courier_services/services/auth.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/utils/validators.dart';
@@ -23,6 +24,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             "Please wait ...",
             style: TextStyle(color: ColorTheme.successColor),
           ),
+          duration: SNACKBARDURATION,
         ),
       );
       final res = await Auth.resetPassword(_emailController.text.trim());

@@ -15,6 +15,17 @@ class ShipmentInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _acceptShipment() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Please wait..",
+            style: TextStyle(
+              color: ColorTheme.successColor,
+            ),
+          ),
+          duration: SNACKBARDURATION,
+        ),
+      );
       _service.acceptSipmentRequest(shipment.id).then((res) => res.fold((l) {
             Navigator.of(context).popUntil((route) => route.isFirst);
             Navigator.of(context).pushNamed(AppRoutes.shipmentHistory);
@@ -25,21 +36,22 @@ class ShipmentInfo extends StatelessWidget {
                   r.message,
                   style: TextStyle(color: Theme.of(context).errorColor),
                 ),
+                duration: SNACKBARDURATION,
               ),
             );
           }));
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Shipment Information",
-            style: TextStyle(color: ColorTheme.dark[1]),
-          ),
-          automaticallyImplyLeading: true,
+      appBar: AppBar(
+        title: Text(
+          "Shipment Information",
+          style: TextStyle(color: ColorTheme.dark[1]),
         ),
-        body: SafeArea(
-            child: Padding(
+        automaticallyImplyLeading: true,
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
@@ -241,7 +253,9 @@ class ShipmentInfo extends StatelessWidget {
               )
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _circle() {

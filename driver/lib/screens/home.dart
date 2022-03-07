@@ -37,14 +37,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           }, (r) {
             setState(() {});
             _shipmentRequests = [];
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                r.message,
-                style: TextStyle(
-                  color: Theme.of(context).errorColor,
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  r.message,
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                  ),
                 ),
+                duration: SNACKBARDURATION,
               ),
-            ));
+            );
           }),
         );
   }
@@ -117,25 +120,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            _shipmentRequests == null
-                ? Container()
-                : Positioned(
-                    child: _shipmentRequests!.isEmpty
-                        ? Card(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 30),
-                              child: Center(
-                                child: Text(
-                                  "No Shipment Request",
-                                ),
+            Positioned(
+              child: _shipmentRequests == null
+                  ? Card(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 30),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: ColorTheme.primary2Color,
+                          ),
+                        ),
+                      ),
+                    )
+                  : _shipmentRequests!.isEmpty
+                      ? Card(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 30),
+                            child: Center(
+                              child: Text(
+                                "No Shipment Request",
                               ),
                             ),
-                          )
-                        : requestList(),
-                    bottom: 100,
-                    left: 0,
-                    width: MediaQuery.of(context).size.width,
-                  )
+                          ),
+                        )
+                      : requestList(),
+              bottom: 100,
+              left: 0,
+              width: MediaQuery.of(context).size.width,
+            )
           ],
         ),
       ),

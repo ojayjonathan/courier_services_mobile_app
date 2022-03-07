@@ -25,7 +25,7 @@ class Auth {
         ),
       );
       SharedPreferences _prefs = await SharedPreferences.getInstance();
-      _prefs.setString("authToken", response.data['token']);
+      _prefs.setString("driver_authToken", response.data['token']);
       return Left(User.fromJson(response.data));
     } catch (e) {
       return Right(getException(e));
@@ -51,7 +51,7 @@ class Auth {
 
   static Future<String?> getAuthToken() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    return _prefs.getString("authToken");
+    return _prefs.getString("driver_authToken");
   }
 
   static Future<Either<User, ErrorMessage>> registerUser(Map data) async {
@@ -59,10 +59,9 @@ class Auth {
       final response = await dio.post("${URL}auth/register/",
           data: data, options: Options(sendTimeout: timeout));
       SharedPreferences _prefs = await SharedPreferences.getInstance();
-      _prefs.setString("authToken", response.data['token']);
+      _prefs.setString("driver_authToken", response.data['token']);
       return Left(User.fromJson(response.data));
     } catch (e) {
-      print(e);
       return Right(getException(e));
     }
   }
@@ -70,7 +69,7 @@ class Auth {
   static Future<Either<User, ErrorMessage>> updateProfile(Map data) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
-      String? authToken = _prefs.getString("authToken");
+      String? authToken = _prefs.getString("driver_authToken");
       var _profile = await dio.put("${URL}driver/profile/",
           options: Options(
             headers: {'Authorization': 'Token $authToken'},
@@ -104,7 +103,7 @@ class Auth {
       return Left(User.fromJson(jsonDecode(_userData)));
     } else {
       try {
-        String? authToken = _prefs.getString("authToken");
+        String? authToken = _prefs.getString("driver_authToken");
         var profile = await dio.get("${URL}driver/profile/",
             options: Options(
                 headers: {'Authorization': 'Token $authToken'},
@@ -120,7 +119,7 @@ class Auth {
   static Future<List<UserNotification>> notification() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
-      String? authToken = _prefs.getString("authToken");
+      String? authToken = _prefs.getString("driver_authToken");
       var res = await dio.get("${URL}notification/",
           options: Options(
               headers: {'Authorization': 'Token $authToken'},
@@ -130,7 +129,6 @@ class Auth {
         data.map((e) => UserNotification.fromJson(e)),
       );
     } catch (e) {
-      print(e);
       throw getException(e);
     }
   }
