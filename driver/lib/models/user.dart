@@ -30,14 +30,16 @@ class User {
 
   @override
   String toString() {
-    return jsonEncode(this.toJson(),);
+    return jsonEncode(
+      this.toJson(),
+    );
   }
 }
 
 class Driver {
   User user;
-  String dlNumber;
-  String gender;
+  String? dlNumber;
+  String? gender;
 
   Driver({required this.user, required this.dlNumber, required this.gender});
 

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:courier_services/models/location.dart';
 import 'package:courier_services/models/user.dart';
-import 'package:flutter/scheduler.dart';
 
 class Shipment {
   int? id;

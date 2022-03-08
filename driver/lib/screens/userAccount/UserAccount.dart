@@ -12,7 +12,7 @@ class AccountPage extends StatefulWidget {
 
 class MapScreenState extends State<AccountPage>
     with SingleTickerProviderStateMixin {
-  User? user;
+  Driver? user;
 
   @override
   void initState() {
@@ -73,8 +73,10 @@ class MapScreenState extends State<AccountPage>
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 topRight: Radius.circular(40))),
-                        child: ProfilePage(
-                          user: user!,
+                        child: SingleChildScrollView(
+                          child: ProfilePage(
+                            user: user!,
+                          ),
                         ),
                       ),
                     )
@@ -103,7 +105,7 @@ class MapScreenState extends State<AccountPage>
                       alignment: Alignment.center,
                       child: user != null
                           ? Text(
-                              "${user!.userName[0]}".toUpperCase(),
+                              "${user!.user.userName[0]}".toUpperCase(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,

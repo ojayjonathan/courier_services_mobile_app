@@ -97,11 +97,8 @@ ErrorMessage getException(error) {
       response = {"message": "Unexpected error occured", "statusCode": 408};
     }
   } else {
-    if (error.toString().contains("is not a subtype of")) {
-      response = {"message": "Unable to process your request", "statusCode": 0};
-    } else {
-      response = {"message": "Unexpected error occured", "statusCode": 408};
-    }
+    response = {"message": "Unexpected error occured", "statusCode": 408};
   }
+  print(error);
   return ErrorMessage(response["message"], response["statusCode"]);
 }

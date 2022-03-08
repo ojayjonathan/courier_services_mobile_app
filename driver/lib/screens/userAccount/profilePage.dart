@@ -7,7 +7,7 @@ import 'package:courier_services/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  final User user;
+  final Driver user;
   const ProfilePage({required this.user});
 
   @override
@@ -15,20 +15,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late User user;
+  late Driver user;
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _dlNumberController = TextEditingController();
 
   @override
   void initState() {
     user = widget.user;
-    _emailController.text = user.email;
-    _usernameController.text = user.userName;
-    _phoneNumberController.text = user.phoneNumber;
+    _emailController.text = user.user.email;
+    _usernameController.text = user.user.userName;
+    _phoneNumberController.text = user.user.phoneNumber;
+    _dlNumberController.text = user.dlNumber ?? "";
     super.initState();
   }
 
@@ -48,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
         "email": _emailController.text,
         "username": _usernameController.text,
         "phone_number": "+254${(_phoneNumberController.text).substring(1)}",
+        "dl_number":_dlNumberController.text
       });
       _res.fold((_updatedUser) {
         setState(
@@ -81,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
     _emailController.dispose();
     _usernameController.dispose();
-
+    _dlNumberController.dispose();
     _phoneNumberController.dispose();
   }
 
@@ -150,14 +153,27 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                 child: _labelText("Mobile")),
             Padding(
+              padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Enter Mobile Number",
+                ),
+                enabled: !_status,
+                validator: phoneValidator,
+                controller: _phoneNumberController,
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                child: _labelText('Driver Licence Number ')),
+            Padding(
                 padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                 child: TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter Mobile Number",
-                  ),
+                      hintText: "Enter Driver Licence Number"),
                   enabled: !_status,
-                  validator: phoneValidator,
-                  controller: _phoneNumberController,
+                  controller: _dlNumberController,
+                  validator: requiredValidator,
                 )),
             !_status ? _getActionButtons() : Container(),
           ],

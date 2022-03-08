@@ -66,7 +66,7 @@ class Auth {
     }
   }
 
-  static Future<Either<User, ErrorMessage>> updateProfile(Map data) async {
+  static Future<Either<Driver, ErrorMessage>> updateProfile(Map data) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
       String? authToken = _prefs.getString("driver_authToken");
@@ -76,8 +76,8 @@ class Auth {
             sendTimeout: timeout,
           ),
           data: jsonEncode(data));
-      _prefs.setString("user", jsonEncode(_profile.data));
-      return Left(User.fromJson(_profile.data["user"]));
+      _prefs.setString("driver", jsonEncode(_profile.data));
+      return Left(Driver.fromJson(_profile.data));
     } catch (e) {
       return Right(getException(e));
     }
@@ -96,11 +96,11 @@ class Auth {
     }
   }
 
-  static Future<Either<User, ErrorMessage>> getUserProfile() async {
+  static Future<Either<Driver, ErrorMessage>> getUserProfile() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    String? _userData = _prefs.getString("user");
+    String? _userData = _prefs.getString("driver");
     if (_userData != null) {
-      return Left(User.fromJson(jsonDecode(_userData)));
+      return Left(Driver.fromJson(jsonDecode(_userData)));
     } else {
       try {
         String? authToken = _prefs.getString("driver_authToken");
@@ -108,8 +108,8 @@ class Auth {
             options: Options(
                 headers: {'Authorization': 'Token $authToken'},
                 sendTimeout: timeout));
-        _prefs.setString("user", jsonEncode(profile.data["user"]));
-        return Left(User.fromJson(profile.data["user"]));
+        _prefs.setString("driver", jsonEncode(profile.data));
+        return Left(Driver.fromJson(profile.data));
       } catch (e) {
         return Right(getException(e));
       }

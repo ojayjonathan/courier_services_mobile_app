@@ -94,7 +94,9 @@ class DriverShipmentProvider {
           sendTimeout: timeout,
         ),
       );
+
       Iterable data = response.data;
+    
       return List<Carriage>.from(
         data.map((json) => Carriage.fromJson(json)),
       );

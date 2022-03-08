@@ -1,4 +1,5 @@
 import 'package:courier_services/constants.dart';
+import 'package:courier_services/services/auth.dart';
 import 'package:courier_services/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   Future initializeApp() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    String? _authToken = _prefs.getString("authToken");
+    String? _authToken = await Auth.getAuthToken();
     bool _seen = _prefs.getBool("seen") ?? false;
     //inialize app data
     if (_seen) {
