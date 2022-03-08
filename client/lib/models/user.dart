@@ -38,7 +38,7 @@ class User {
 
 class Driver {
   User user;
-  String dlNumber;
+  String? dlNumber;
   String gender;
 
   Driver({required this.user, required this.dlNumber, required this.gender});

@@ -76,7 +76,7 @@ class Auth {
             sendTimeout: timeout,
           ),
           data: jsonEncode(data));
-      _prefs.setString("user", jsonEncode(_profile.data));
+      _prefs.setString("user", jsonEncode(_profile.data["user"]));
       return Left(User.fromJson(_profile.data["user"]));
     } catch (e) {
       return Right(getException(e));
@@ -129,7 +129,6 @@ class Auth {
         data.map((e) => UserNotification.fromJson(e)),
       );
     } catch (e) {
-      (e);
       throw getException(e);
     }
   }

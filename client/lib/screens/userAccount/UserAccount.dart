@@ -73,8 +73,10 @@ class MapScreenState extends State<AccountPage>
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 topRight: Radius.circular(40))),
-                        child: ProfilePage(
-                          user: user!,
+                        child: SingleChildScrollView(
+                          child: ProfilePage(
+                            user: user!,
+                          ),
                         ),
                       ),
                     )
