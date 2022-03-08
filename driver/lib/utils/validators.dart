@@ -7,6 +7,15 @@ String? requiredValidator(String? value) {
   }
 }
 
+String? numberValidator(String? value) {
+  if (value == null) {
+    return "Required";
+  }
+  if (!new RegExp(r"\d+").hasMatch(value)) {
+    return "Provide valid number";
+  }
+}
+
 String? phoneValidator(String? value) {
   RegExp re = new RegExp(r"0(1|7)\d{8}");
   if (value == null) {

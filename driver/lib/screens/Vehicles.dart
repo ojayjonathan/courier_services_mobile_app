@@ -169,7 +169,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
             DefaultInput(
                 hintText: "Charge Rate",
                 controller: _chargeRate,
-                validator: requiredValidator,
+                validator: numberValidator,
                 icon: Icons.text_fields),
             _dropDown(),
             SizedBox(
