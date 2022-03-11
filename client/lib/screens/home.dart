@@ -6,7 +6,7 @@ import 'package:courier_services/models/carriage.dart';
 import 'package:courier_services/models/location.dart';
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/screens/location_search_bar.dart';
-import 'package:courier_services/screens/packageDetail.dart';
+import 'package:courier_services/screens/shipment_pricing.dart';
 import 'package:courier_services/services/place_service.dart';
 import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
@@ -14,6 +14,7 @@ import 'package:courier_services/utils/map_utils.dart';
 import 'package:courier_services/utils/validators.dart';
 import 'package:courier_services/widgets/button/button.dart';
 import 'package:courier_services/widgets/drawer.dart';
+import 'package:courier_services/screens/package_details_bottom_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -36,18 +37,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final placeService = PlaceApiProvider(randomString(10));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
-  List<Carriage> _carriage = [];
   List<Marker> _markers = [];
   ShipmentApiProvider _shipmentApiProvider = ShipmentApiProvider();
-  Carriage? _selectedCarriage;
-  Place? pickup;
-  Place? dropoff;
+  Shipment _shipment = Shipment();
+  // Place? pickup;
+  // Place? dropoff;
   bool _showNextButton = false;
   // distance between origin and destination
   double? _distance;
   // Object for PolylinePoints
   late PolylinePoints polylinePoints;
-
 // List of coordinates to join
   List<LatLng> polylineCoordinates = [];
 
@@ -58,7 +57,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _shipmentApiProvider.carriageList().then(
           (res) => res.fold(
             (carriage) {
-              _carriage = carriage;
               setState(() {});
             },
             (r) => ScaffoldMessenger.of(context).showSnackBar(
@@ -136,24 +134,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             .getPlaceDetailFromId(result.placeId)
             .then((_res) => _res.fold((_place) {
                   if (selected == "pickup") {
-                    pickup = _place;
+                    _shipment.origin = _place;
                   } else {
-                    dropoff = _place;
+                    _shipment.destination = _place;
                   }
                   //update markers
 
                   _markers.clear();
-                  if (dropoff != null) {
+                  if (_shipment.destination != null) {
                     _markers.add(
                       Marker(
                           infoWindow: InfoWindow(title: "dropoff"),
                           markerId: MarkerId(
                             randomString(10),
                           ),
-                          position: pickup!.latLng!),
+                          position: _shipment.destination!.latLng!),
                     );
                   }
-                  if (pickup != null) {
+                  if (_shipment.origin != null) {
                     _markers.add(
                       Marker(
                           infoWindow: InfoWindow(
@@ -162,19 +160,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           markerId: MarkerId(
                             randomString(10),
                           ),
-                          position: dropoff!.latLng!),
+                          position: _shipment.origin!.latLng!),
                     );
                   }
 
                   _mapController.future.then((_controller) {
-                    if (dropoff != null && pickup != null) {
+                    if (_shipment.origin != null &&
+                        _shipment.destination != null) {
                       // Accommodate the two locations within the
                       // camera view of the map
                       polylines.clear();
-                      _createPolylines(dropoff!.latLng!, pickup!.latLng!);
+                      _createPolylines(_shipment.origin!.latLng!,
+                          _shipment.destination!.latLng!);
                       _controller.animateCamera(
                         CameraUpdate.newLatLngBounds(
-                          latLngBounds(pickup!.latLng!, dropoff!.latLng!),
+                          latLngBounds(
+                            _shipment.origin!.latLng!,
+                            _shipment.destination!.latLng!,
+                          ),
                           100.0,
                         ),
                       );
@@ -185,7 +188,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         zoom: 10.0,
                       );
                       _controller.animateCamera(
-                        CameraUpdate.newCameraPosition(update),
+                        CameraUpdate.newCameraPosition(
+                          update,
+                        ),
                       );
                     }
                   });
@@ -280,144 +285,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               onPressed: () => showBottomSheet(
                 context: context,
                 builder: (context) {
-                  return bottomSheet();
+                  return PackageDetailBottomSheet(_shipment);
                 },
               ),
             )
           : null,
-    );
-  }
-
-  Widget bottomSheet() {
-    getCarriage();
-    return StatefulBuilder(builder: (context, bState) {
-      return Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * .5,
-            maxWidth: MediaQuery.of(context).size.width),
-        child: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            appBar: TabBar(
-              labelColor: ColorTheme.dark[1],
-              tabs: [
-                Tab(
-                  text: "Small",
-                ),
-                Tab(text: "Medium"),
-                Tab(text: "Large"),
-              ],
-            ),
-            body: TabBarView(
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ..._carriage.where(
-                      (element) {
-                        return element.carrierType == "P";
-                      },
-                    ).map(
-                      (_element) => carriageTile(_element, bState),
-                    ),
-                    Expanded(child: Container()),
-                    _continue()
-                  ],
-                ),
-                Column(
-                  children: [
-                    ..._carriage.where(
-                      (element) {
-                        return element.carrierType == "B";
-                      },
-                    ).map(
-                      (_element) => carriageTile(_element, bState),
-                    ),
-                    Expanded(child: Container()),
-                    _continue()
-                  ],
-                ),
-                Column(
-                  children: [
-                    ..._carriage.where(
-                      (element) {
-                        return element.carrierType == "L";
-                      },
-                    ).map(
-                      (_element) => carriageTile(_element, bState),
-                    ),
-                    Expanded(child: Container()),
-                    _continue()
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  Padding _continue() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: DefaultButton(
-          handlePress: () {
-            if (_selectedCarriage == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "Please select carriage before you continue",
-                    style: TextStyle(color: Theme.of(context).errorColor),
-                  ),
-                  duration: SNACKBARDURATION
-                ),
-              );
-              return;
-            }
-            Shipment _shipment = Shipment(
-              origin: pickup,
-              destination: dropoff,
-              vehicle: _selectedCarriage!.id,
-              distance: _distance,
-              price_: _selectedCarriage!.chargeRate * _distance!,
-            );
-            //close bottomsheet
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => PackageDetail(_shipment)),
-            );
-          },
-          text: "Continue"),
-    );
-  }
-
-  ListTile carriageTile(Carriage carriage, StateSetter bState) {
-    bool selected = _selectedCarriage == carriage;
-    return ListTile(
-      onTap: () {
-        _selectedCarriage = carriage;
-        bState(() {});
-      },
-      selected: selected,
-      leading: Container(
-        height: 50,
-        width: 50,
-        child: Icon(carriage.icon),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(25),
-          ),
-          border: Border.all(
-              color: selected ? ColorTheme.primaryColor : ColorTheme.dark[3],
-              width: 2),
-        ),
-      ),
-      trailing: Text(
-        "Ksh ${_distance != null ? (carriage.chargeRate * _distance!).toStringAsFixed(2) : "None"}",
-      ),
     );
   }
 
@@ -450,10 +322,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         } else {
           //calculate the btwn pickup and dropoff coordinates
           _distance = coordinateDistance(
-              pickup!.latLng!.latitude,
-              pickup!.latLng!.longitude,
-              dropoff!.latLng!.latitude,
-              dropoff!.latLng!.longitude);
+              _shipment.origin!.latLng!.latitude,
+              _shipment.origin!.latLng!.longitude,
+              _shipment.destination!.latLng!.latitude,
+              _shipment.destination!.latLng!.longitude);
         }
         // Defining an ID
         PolylineId id = PolylineId(randomString(10));
@@ -469,11 +341,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         polylines.add(polyline);
         setState(() {});
         _showNextButton = true;
-        //
+        _shipment.distance = _distance;
         showBottomSheet(
             context: context,
             builder: (_) {
-              return bottomSheet();
+              return PackageDetailBottomSheet(_shipment);
             });
       },
     );

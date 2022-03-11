@@ -1,3 +1,4 @@
+import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
@@ -17,7 +18,9 @@ class RideHistory extends StatelessWidget {
         title: Text('Shipment History'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.notifications);
+            },
             icon: Icon(Icons.notifications),
           )
         ],

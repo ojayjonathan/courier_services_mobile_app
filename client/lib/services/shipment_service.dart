@@ -26,7 +26,6 @@ class ShipmentApiProvider {
       );
       return Left(Shipment.fromJson(response.data["shipment"]));
     } catch (e) {
-
       return Right(getException(e));
     }
   }

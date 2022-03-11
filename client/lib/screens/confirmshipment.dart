@@ -60,11 +60,11 @@ class ConfirmShipment extends StatelessWidget {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-        ),
-        body: SafeArea(
-            child: Padding(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
@@ -173,6 +173,42 @@ class ConfirmShipment extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 30,
+              ),
+              Card(
+                elevation: 5,
+                child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Driver: ${this.shipment.carriage?.driver.user.userName}",
+                          style: TextStyle(color: ColorTheme.dark[2]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Vehicle Registation Number: ${this.shipment.carriage?.vehicleRegistrationNumber}",
+                          style: TextStyle(color: ColorTheme.dark[2]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Driver Phone no: ${this.shipment.carriage?.driver.user.phoneNumber}",
+                          style: TextStyle(color: ColorTheme.dark[2]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(height: 30),
               Card(
                 elevation: 5,
@@ -223,7 +259,9 @@ class ConfirmShipment extends StatelessWidget {
               )
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _circle() {

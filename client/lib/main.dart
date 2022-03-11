@@ -64,7 +64,6 @@ class _CourierClientState extends State<CourierClient> {
   @override
   void initState() {
     super.initState();
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;

@@ -1,19 +1,21 @@
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/screens/confirmshipment.dart';
+import 'package:courier_services/screens/shipment_pricing.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/utils/validators.dart';
 import 'package:courier_services/widgets/button/button.dart';
 import 'package:courier_services/widgets/defultInput/inputField.dart';
 import 'package:flutter/material.dart';
 
-class PackageDetail extends StatefulWidget {
+class PackageDetailBottomSheet extends StatefulWidget {
   @override
-  State<PackageDetail> createState() => _PackageDetailState();
+  State<PackageDetailBottomSheet> createState() =>
+      _PackageDetailBottomSheetState();
   final Shipment shipment;
-  PackageDetail(this.shipment);
+  PackageDetailBottomSheet(this.shipment);
 }
 
-class _PackageDetailState extends State<PackageDetail> {
+class _PackageDetailBottomSheetState extends State<PackageDetailBottomSheet> {
   final TextEditingController _pickup = TextEditingController();
 
   final TextEditingController _dropoff = TextEditingController();
@@ -22,10 +24,8 @@ class _PackageDetailState extends State<PackageDetail> {
   String size = "S";
   @override
   void initState() {
-    _pickup.text =
-        "${widget.shipment.origin?.name}";
-    _dropoff.text =
-        "${widget.shipment.destination?.name}";
+    _pickup.text = "${widget.shipment.origin?.name}";
+    _dropoff.text = "${widget.shipment.destination?.name}";
     super.initState();
   }
 
@@ -34,23 +34,17 @@ class _PackageDetailState extends State<PackageDetail> {
       size,
       _natureOfGoods == 1 ? "F" : "NF",
     );
+    Navigator.of(context).pop();
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ConfirmShipment(
-          shipment: widget.shipment,
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => PackageDetail(widget.shipment)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-      ),
-      body: SafeArea(
-        child: Padding(
+    return Wrap(
+      children: [
+        Padding(
           padding: const EdgeInsets.all(10.0),
           child: Form(
             child: Column(
@@ -156,7 +150,7 @@ class _PackageDetailState extends State<PackageDetail> {
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 

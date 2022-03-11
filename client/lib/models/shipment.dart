@@ -1,14 +1,17 @@
 import 'dart:convert';
 
+import 'package:courier_services/models/carriage.dart';
 import 'package:courier_services/models/location.dart';
+
 class UserNotification {
   String message;
   String date;
- UserNotification(this.message, this.date);
+  UserNotification(this.message, this.date);
   factory UserNotification.fromJson(Map json) {
     return UserNotification(json["message"], json["date"]);
   }
 }
+
 class Shipment {
   int? id;
   Cargo? cargo;
@@ -20,6 +23,7 @@ class Shipment {
   String? shipmentDate;
   double? rating;
   double? distance;
+  Carriage? carriage;
   double? get price => price_ != null
       ? double.parse(
           price_!.toStringAsFixed(2),
