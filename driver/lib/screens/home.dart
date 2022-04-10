@@ -23,33 +23,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
   List<CustomerShipment>? _shipmentRequests;
-  DriverShipmentProvider _shipmentApiProvider = DriverShipmentProvider();
-
+  final _shipmentApiProvider = DriverShipmentProvider();
   bool _showNextButton = false;
+
+  _initShipment() async {
+    await _shipmentApiProvider.driverShipmentRequests().then(
+          (res) => res.fold((shipments) {
+            _shipmentRequests = shipments;
+            setState(() {});
+          }, (r) => {}),
+        );
+  }
 
   @override
   void initState() {
     super.initState();
-    _shipmentApiProvider.driverShipmentRequests().then(
-          (res) => res.fold((shipments) {
-            _shipmentRequests = shipments;
-            setState(() {});
-          }, (r) {
-            setState(() {});
-            _shipmentRequests = [];
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  r.message,
-                  style: TextStyle(
-                    color: Theme.of(context).errorColor,
-                  ),
-                ),
-                duration: SNACKBARDURATION,
-              ),
-            );
-          }),
-        );
+    _initShipment();
   }
 
   toggleDrawer() {

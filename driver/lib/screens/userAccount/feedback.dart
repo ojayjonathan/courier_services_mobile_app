@@ -16,7 +16,12 @@ class _UserFeedBackState extends State<UserFeedBack> {
             content: Text(
           "Thank you for the feedback",
           style: TextStyle(color: ColorTheme.successColor),
-        )));
+
+        ),
+        
+        ),
+        
+        );
         Navigator.of(context).pop();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

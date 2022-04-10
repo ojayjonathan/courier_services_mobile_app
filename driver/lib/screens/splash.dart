@@ -47,7 +47,7 @@ class SplashScreenState extends State<SplashScreen> {
   Future initializeApp() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? _authToken = await Auth.getAuthToken();
-    bool _seen = _prefs.getBool("seen") ?? false;
+    bool _seen = _prefs.getBool("driver-seen") ?? false;
     //inialize app data
     if (_seen) {
       if (_authToken == null) {
@@ -56,7 +56,7 @@ class SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushReplacementNamed(AppRoutes.home);
       }
     } else {
-      _prefs.setBool('seen', true);
+      _prefs.setBool('driver-seen', true);
       Navigator.of(context).pushReplacementNamed(AppRoutes.intro);
     }
   }

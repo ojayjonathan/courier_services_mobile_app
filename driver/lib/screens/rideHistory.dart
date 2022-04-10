@@ -1,8 +1,11 @@
+import 'package:courier_services/constants.dart';
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/services/driver_shipment.service.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/widgets/RideHistoryCard/card.dart';
 import 'package:flutter/material.dart';
+
+
 
 class RideHistory extends StatelessWidget {
   RideHistory({Key? key}) : super(key: key);
@@ -17,7 +20,9 @@ class RideHistory extends StatelessWidget {
         title: Text('Order History'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.notifications);
+            },
             icon: Icon(Icons.notifications),
           )
         ],

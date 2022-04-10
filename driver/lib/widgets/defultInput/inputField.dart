@@ -10,6 +10,7 @@ class DefaultInput extends StatelessWidget {
   final IconData icon;
   final FocusNode? focusNode;
   final bool readOnly;
+  final TextInputType keyboardType;
   const DefaultInput(
       {Key? key,
       required this.hintText,
@@ -18,7 +19,8 @@ class DefaultInput extends StatelessWidget {
       required this.icon,
       this.focusNode,
       this.readOnly = false,
-      this.isPassword = false})
+      this.isPassword = false,
+      this.keyboardType = TextInputType.text})
       : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class DefaultInput extends StatelessWidget {
             )),
         controller: this.controller,
         validator: this.validator,
+        keyboardType: keyboardType,
       ),
     );
   }

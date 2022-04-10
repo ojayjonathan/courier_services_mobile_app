@@ -170,6 +170,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
                 hintText: "Charge Rate",
                 controller: _chargeRate,
                 validator: numberValidator,
+                keyboardType: TextInputType.number,
                 icon: Icons.text_fields),
             _dropDown(),
             SizedBox(
@@ -186,7 +187,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
                       "charge_rate": _chargeRate.text,
                       "vehicle_registration_number":
                           _vehicleRegistartionNumber.text,
-                      "carrier_capacity": "M",
+                      "carrier_capacity": [null, "L", "M", "S"][_carriageType!],
                     };
                     _apiProvider.createcarriage(data).then(
                           (value) => value.fold(

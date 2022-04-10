@@ -61,6 +61,14 @@ class SignUp extends StatelessWidget {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: Text(
+          "Register",
+          textAlign:TextAlign.center,
+          style: TextStyle(color: ColorTheme.dark[1], fontSize: 20),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -116,6 +124,7 @@ class SignUp extends StatelessWidget {
                           child: DefaultInput(
                             controller: _emailController,
                             hintText: 'Email',
+                            keyboardType: TextInputType.emailAddress,
                             validator: requiredValidator,
                             icon: Icons.email_outlined,
                           ),
@@ -126,6 +135,7 @@ class SignUp extends StatelessWidget {
                             controller: _phoneController,
                             hintText: 'Phone number',
                             validator: phoneValidator,
+                            keyboardType: TextInputType.number,
                             icon: Icons.phone,
                           ),
                         ),
