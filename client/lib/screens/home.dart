@@ -38,12 +38,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
   List<Marker> _markers = [];
-  ShipmentApiProvider _shipmentApiProvider = ShipmentApiProvider();
   Shipment _shipment = Shipment();
-  // Place? pickup;
-  // Place? dropoff;
   bool _showNextButton = false;
-  // distance between origin and destination
   double? _distance;
   // Object for PolylinePoints
   late PolylinePoints polylinePoints;
@@ -53,30 +49,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 // Map storing polylines created by connecting two points
   List<Polyline> polylines = [];
 
-  getCarriage() {
-    _shipmentApiProvider.carriageList().then(
-          (res) => res.fold(
-            (carriage) {
-              setState(() {});
-            },
-            (r) => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  r.message,
-                  style: TextStyle(
-                    color: Theme.of(context).errorColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-  }
-
   @override
   void initState() {
     super.initState();
-    getCarriage();
+    // getCarriage();
   }
 
   toggleDrawer() {

@@ -5,7 +5,6 @@ import 'package:courier_services/screens/confirmshipment.dart';
 import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/widgets/button/button.dart';
-import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 
 class PackageDetail extends StatefulWidget {
@@ -81,7 +80,7 @@ class _PackageDetailState extends State<PackageDetail> {
                                   ),
                                   ..._carriage.where(
                                     (element) {
-                                      return element.carrierType == "P";
+                                      return element.carrierType == "B";
                                     },
                                   ).map(
                                     (_element) => carriageTile(_element),
@@ -92,7 +91,7 @@ class _PackageDetailState extends State<PackageDetail> {
                                 children: [
                                   ..._carriage.where(
                                     (element) {
-                                      return element.carrierType == "B";
+                                      return element.carrierType == "P";
                                     },
                                   ).map(
                                     (_element) => carriageTile(_element),
@@ -122,10 +121,18 @@ class _PackageDetailState extends State<PackageDetail> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "Total Price\t\t\t",
+                              text: "Total Distance\t\t\t",
                             ),
                             TextSpan(
-                              text: "${widget.shipment.price ?? 0}",
+                              text:
+                                  "${widget.shipment.distance?.toStringAsFixed(2)} km",
+                            ),
+                            TextSpan(
+                              text: "\t\t\t Total Price Ksh\t\t\t",
+                            ),
+                            TextSpan(
+                              text:
+                                  "${widget.shipment.price?.toStringAsFixed(2) ?? 0}",
                             ),
                           ],
                           style: TextStyle(
@@ -184,13 +191,13 @@ class _PackageDetailState extends State<PackageDetail> {
   }
 
   ListTile carriageTile(Carriage carriage) {
-    bool selected = _selectedCarriage == carriage;
+    bool selected = _selectedCarriage?.id == carriage.id;
     return ListTile(
       onTap: () {
-        _selectedCarriage = carriage;
         widget.shipment.price_ = widget.shipment.distance != null
             ? carriage.chargeRate * widget.shipment.distance!
             : 0.0;
+        _selectedCarriage = carriage;
         setState(() {});
       },
       selected: selected,
@@ -207,6 +214,9 @@ class _PackageDetailState extends State<PackageDetail> {
               width: 2),
         ),
       ),
+      title: Text(carriage.driver.user.userName, textAlign: TextAlign.center),
+      subtitle:
+          Text(carriage.driver.user.phoneNumber, textAlign: TextAlign.center),
       trailing: Text(
         "Ksh ${carriage.chargeRate} per km",
       ),

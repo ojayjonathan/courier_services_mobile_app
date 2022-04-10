@@ -248,10 +248,17 @@ class ConfirmShipment extends StatelessWidget {
                       ),
                     ),
                     Padding(
+                      padding: EdgeInsets.only(top: 8, left: 8),
+                      child: Text(
+                        "Make payment to complete the order.",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    Padding(
                       padding: EdgeInsets.all(8),
                       child: DefaultButton(
                         handlePress: _confirmShipment,
-                        text: "Proceed to payment",
+                        text: "Pay Now",
                       ),
                     )
                   ],

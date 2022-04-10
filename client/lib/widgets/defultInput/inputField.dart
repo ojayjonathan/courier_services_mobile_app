@@ -1,5 +1,6 @@
 import 'package:courier_services/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../theme.dart';
 
 class DefaultInput extends StatelessWidget {
@@ -10,6 +11,7 @@ class DefaultInput extends StatelessWidget {
   final IconData icon;
   final FocusNode? focusNode;
   final bool readOnly;
+  final TextInputType keyboardType;
   const DefaultInput(
       {Key? key,
       required this.hintText,
@@ -18,7 +20,8 @@ class DefaultInput extends StatelessWidget {
       required this.icon,
       this.focusNode,
       this.readOnly = false,
-      this.isPassword = false})
+      this.isPassword = false,
+      this.keyboardType = TextInputType.text})
       : super(key: key);
 
   @override
@@ -44,6 +47,7 @@ class DefaultInput extends StatelessWidget {
             )),
         controller: this.controller,
         validator: this.validator,
+        keyboardType: keyboardType,
       ),
     );
   }
