@@ -31,7 +31,7 @@ Road cargo transport system mobile applications (driver, client)
 ## 🧐 About <a name = "about"></a>
 
 <p > 
-Courier Services contain several software application that facilitate management and transportation of road cargo transport.
+Courier Services contain two mobile application that facilitate management and transportation of road cargo transport.
     <br> 
 </p>
 
