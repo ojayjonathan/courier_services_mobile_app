@@ -31,18 +31,18 @@ Road cargo transport system mobile applications (driver, client)
 ## 🧐 About <a name = "about"></a>
 
 <p > 
-Courier Services contain two mobile application that facilitate management and transportation of road cargo transport.
+Courier Services contain two mobile application that facilitate management and transportation of cargo by road.
     <br> 
 </p>
 
 <p > 
 The application is aimed at linking transport service providers:
 
-- trucks
-- motobikes
-- bicycles
-- taxi
-- and private car owners
+- trucks 🚛
+- motobikes 🚲
+- bicycles 🚲
+- taxi 🚕
+- and private car owners 🛻
 
 with clients who wish to move goods from one location to another.
 <br>
