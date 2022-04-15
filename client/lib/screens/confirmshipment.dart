@@ -25,6 +25,26 @@ class ConfirmShipment extends StatelessWidget {
           duration: SNACKBARDURATION,
         ),
       );
+      // Payment request
+      _service.pay().then(
+            (value) => value.fold(
+              (l) => {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      l.message,
+                      style: TextStyle(
+                        color: ColorTheme.successColor,
+                      ),
+                    ),
+                    duration: SNACKBARDURATION,
+                  ),
+                )
+              },
+              (r) => print(r),
+            ),
+          );
+      // Create shipment
       _service
           .create(
             shipment.toJson(),

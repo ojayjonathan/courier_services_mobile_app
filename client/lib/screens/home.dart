@@ -2,17 +2,12 @@ import 'dart:async';
 
 import 'package:courier_services/conf.dart';
 import 'package:courier_services/constants.dart';
-import 'package:courier_services/models/carriage.dart';
-import 'package:courier_services/models/location.dart';
 import 'package:courier_services/models/shipment.dart';
 import 'package:courier_services/screens/location_search_bar.dart';
-import 'package:courier_services/screens/shipment_pricing.dart';
 import 'package:courier_services/services/place_service.dart';
-import 'package:courier_services/services/shipment_service.dart';
 import 'package:courier_services/theme.dart';
 import 'package:courier_services/utils/map_utils.dart';
 import 'package:courier_services/utils/validators.dart';
-import 'package:courier_services/widgets/button/button.dart';
 import 'package:courier_services/widgets/drawer.dart';
 import 'package:courier_services/screens/package_details_bottom_sheet.dart';
 import 'package:flutter/foundation.dart';

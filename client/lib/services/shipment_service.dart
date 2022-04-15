@@ -112,4 +112,20 @@ class ShipmentApiProvider {
       return Right(getException(e));
     }
   }
+
+  Future<Either<dynamic, ErrorMessage>> pay() async {
+    try {
+      final response = await dio.get(
+        "${URL}pay",
+        options: Options(
+          headers: {'Authorization': 'Token ${await Auth.getAuthToken()}'},
+          sendTimeout: timeout,
+        ),
+      );
+      print(response);
+      return Left(response);
+    } catch (e) {
+      return Right(getException(e));
+    }
+  }
 }

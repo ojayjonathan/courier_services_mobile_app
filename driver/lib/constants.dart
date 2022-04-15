@@ -20,5 +20,5 @@ class AppRoutes {
 
 const URL = "https://courier-ke.herokuapp.com/";
 // const URL = "http://192.168.43.232:8000/";
-int timeout = 100000;
+int timeout = 10000;
 const Duration SNACKBARDURATION = Duration(seconds: 10);
