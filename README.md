@@ -27,7 +27,6 @@ Road cargo transport system mobile applications (driver, client)
 - [Usage](#usage)
 - [Built Using](#built_using)
 
-
 ## 🧐 About <a name = "about"></a>
 
 <p > 
@@ -78,28 +77,33 @@ The project contain two applications:
 
 ## 🏁 Getting Started <a name ="getting_started"></a>
 
-This project is a starting point for a Flutter application.
+### Android
 
-A few resources to get you started if this is your first Flutter project:
+For each application;
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+#### Set up google maps api key
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Open the the and the android folder
+2. Locate the file `local.properties`; create if doesn't exist
+3. Add your google maps api key as follows. Note DO NOT WRAP THE API KEY VALUE WITH QUOTE CHARACTERS
+  > googleMapsApiKey=`YOUR_GOOGLE_MAPS_API_KEY_VALUE` 
+
+4. In lib create a file conf.dart; `lib/conf.dart` and create a variable
+```dart
+const APIKey = "YOU_GOOGLE_MAPS_API_KEY";
+```
+
+
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 - [Flutter](https://flutter.dev/docs)
 
-
 ## 🎈 Usage <a name="usage"></a>
 
-### Installing
+### Installing Build apps
 
 To install the android applications:
 
 - Download the driver applications [driver](android_apk/driver.apk)
 - Download the client applications [client](android_apk/client.apk)
-
